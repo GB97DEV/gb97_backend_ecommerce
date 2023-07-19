@@ -1,83 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 
 import {
-  CreateGrupos,
-  GetAllGrupos,
-  GetGrupos,
-  UpdateGrupos,
-  DeleteGrupos,
-} from "./src/functions/Grupos";
-
-import {
-  GetAllPersonas,
-  CreatePersonas,
-  UpdatePersonas,
-  GetPersonas,
-  DeletePersonas,
-  GetFilterPersonas,
-} from "./src/functions/Personas";
-
-import {
-  GetAllClientes,
-  CreateClientes,
-  UpdateClientes,
-  GetClientes,
-  DeleteClientes,
-  GetFilterClientes,
-} from "./src/functions/Clientes";
-
-import {
-  CreateCotizaciones,
-  GetAllCotizaciones,
-  UpdateCotizaciones,
-  GetCotizaciones,
-  DeleteCotizaciones,
-  GetFilterCotizaciones,
-} from "./src/functions/Cotizaciones";
-
-// import {
-//   CreateCotizacionesProd,
-//   GetAllCotizacionesProd,
-// } from "./src/functions/CotizacionesProd";
-
-import {
-  GetAllItems,
-  CreateItems,
-  UpdateItems,
-  GetItems,
-  DeleteItems,
-  GetFilterItems,
-} from "./src/functions/Items";
-
-import {
-  GetAllOrdenes,
-  CreateOrdenes,
-  UpdateOrdenes,
-  GetOrdenes,
-  DeleteOrdenes,
-  GetFilterOrdenes,
-  GetOrderCustom,
-} from "./src/functions/Ordenes";
-
-// import {
-//   GetAllOrdenesProd,
-//   CreateOrdenesProd,
-//   UpdateOrdenesProd,
-//   GetOrdenesProd,
-//   DeleteOrdenesProd,
-//   GetFilterOrdenesProd,
-// } from "./src/functions/OrdenesProd";
-
-import {
-  GetAllOrganizaciones,
-  CreateOrganizaciones,
-  UpdateOrganizaciones,
-  GetOrganizaciones,
-  DeleteOrganizaciones,
-  GetFilterOrganizaciones,
-} from "./src/functions/Organizaciones";
-
-import {
   RegisterUsers,
   Login,
   ResetPassUsers,
@@ -88,39 +11,6 @@ import {
   UpdateUsers,
   GetAllUsers,
 } from "./src/functions/User";
-
-import {
-  GetAllPriceList,
-  CreatePriceList,
-  UpdatePriceList,
-  GetPriceList,
-  DeletePriceList,
-  GetFilterPriceList,
-} from "./src/functions/ListaPrecios";
-
-import {
-  GetAllDelivery,
-  CreateDelivery,
-  UpdateDelivery,
-  GetDelivery,
-  DeleteDelivery,
-  GetFilterDelivery,
-} from "./src/functions/Delivery";
-
-// import {
-//   GetAllInsumosEmpaque,
-//   GetFilterInsumosEmpaque,
-//   CreateInsumosEmpaque,
-//   GetInsumoEmpaque,
-//   DeleteInsumoEmpaque,
-//   UpdateInsumoEmpaque,
-// } from "./src/functions/InsumosEmpaque";
-
-// import {
-//   PDFOrdenes,
-//   PDFItems,
-//   PDFCotizaciones,
-// } from "./src/functions/GeneracionArchivos";
 
 const serverlessConfiguration: AWS = {
   service: "aws-lambda-bg97",
@@ -222,48 +112,6 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: {
     Login,
-    GetAllOrganizaciones,
-    CreateOrganizaciones,
-    UpdateOrganizaciones,
-    GetOrganizaciones,
-    DeleteOrganizaciones,
-    GetFilterOrganizaciones,
-    GetAllPersonas,
-    CreatePersonas,
-    UpdatePersonas,
-    GetPersonas,
-    DeletePersonas,
-    GetFilterPersonas,
-    CreateGrupos,
-    GetAllGrupos,
-    GetGrupos,
-    UpdateGrupos,
-    DeleteGrupos,
-    GetAllClientes,
-    CreateClientes,
-    UpdateClientes,
-    GetFilterClientes,
-    GetClientes,
-    DeleteClientes,
-    CreateCotizaciones,
-    GetAllCotizaciones,
-    UpdateCotizaciones,
-    GetCotizaciones,
-    DeleteCotizaciones,
-    GetFilterCotizaciones,
-    GetAllItems,
-    CreateItems,
-    UpdateItems,
-    GetItems,
-    DeleteItems,
-    GetFilterItems,
-    GetAllOrdenes,
-    CreateOrdenes,
-    UpdateOrdenes,
-    GetOrdenes,
-    DeleteOrdenes,
-    GetFilterOrdenes,
-    GetOrderCustom,
     RegisterUsers,
     ResetPasswordConfirmUsers,
     ResetPassUsers,
@@ -271,19 +119,7 @@ const serverlessConfiguration: AWS = {
     GetUsers,
     DeleteUser,
     UpdateUsers,
-    GetAllUsers,
-    GetAllPriceList,
-    CreatePriceList,
-    UpdatePriceList,
-    GetPriceList,
-    DeletePriceList,
-    GetFilterPriceList,
-    GetAllDelivery,
-    CreateDelivery,
-    UpdateDelivery,
-    GetDelivery,
-    DeleteDelivery,
-    GetFilterDelivery,
+    GetAllUsers
   },
   package: {
     individually: true,

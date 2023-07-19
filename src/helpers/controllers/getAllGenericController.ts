@@ -3,15 +3,12 @@ import customMessage from "../customMessage";
 import { applyPagination } from "./../pagination";
 import responseHeaders from "./../responseHeaders";
 import extractFieldValidations from "./../fieldValidation";
-// import DinamicCamp from "../../models/_DinamicCampModel";
 
 export const getAllGeneric = async (
   Model,
   event,
   context,
   acceptLanguage
-  // acceptLanguage,
-  // colletionName
 ) => {
   context.callbackWaitsForEmptyEventLoop = false;
   try {
@@ -31,9 +28,7 @@ export const getAllGeneric = async (
     const message = customMessage(data, "ga", acceptLanguage);
     const body = {
       ...message,
-      // schema: CampsSchema,
       pagination,
-      // fieldValidations,
     };
     return {
       statusCode: 200,
