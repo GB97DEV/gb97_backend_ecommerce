@@ -4,18 +4,18 @@ module.exports.arnAuthorizer = () => ({
 });
 
 module.exports.jwtSecret = () => ({
-  dev: "HKHVHJVKBKJKJBKBKHKBMKHB",
-  prod: "HKHVHJVKBKJKJBKBKHKBMKHB",
+  dev: "HKHVHJVKBKJKJBKsd23234324fsdfdsfsddfdsfBKHKBMKHB",
+  prod: "HKHVHJVKBKJKJBKsdfdsfds3423432BKdsfsdfdsfHKBMKHB",
 });
 
 module.exports.databaseM = () => ({
-  prod: {
-    mongoURL:
-      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97Dev?retryWrites=true&w=majority", // ingresar el valor url correcto para dev
-  },
   dev: {
     mongoURL:
-      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97Prod?retryWrites=true&w=majority",
+      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97EcommerceDev?retryWrites=true&w=majority", 
+  },
+  prod: {
+    mongoURL:
+      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97EcommerceProd?retryWrites=true&w=majority",
   },
 });
 
@@ -23,7 +23,7 @@ module.exports.region = () => ({
   dev: {
     regionAws: "us-east-2",
   },
-  prod: {
+  prod: { 
     regionAws: "us-east-1",
   },
 });

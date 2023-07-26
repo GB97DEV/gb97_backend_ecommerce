@@ -1,6 +1,5 @@
-import User from "../../../models/UserModel";
-import { deleteGeneric } from "../../../helpers/controllers/deleteGenericController";
-import { authMiddleware } from "../../../middleware/authentication";
+import User from "@/services/User/src/models/UserModel";
+import { deleteGeneric } from "@/helpers/controllers/deleteGenericController";
 
 // export const main = authMiddleware(async (event, context) => {
 //   return deleteGeneric(User, event, context);

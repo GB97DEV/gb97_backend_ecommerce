@@ -1,10 +1,9 @@
-import User from "../../../models/UserModel";
-import connectDatabase from "../../../database/mongodb";
+import User from "@/services/User/src/models/UserModel";
+import connectDatabase from "@/database/mongodb";
 import crypto from "crypto";
-import { sendEmail } from "../../../utils/email";
-import responseHeaders from "./../../../helpers/responseHeaders"; // Importar responseHeaders
+import { sendEmail } from "@/utils/email";
+import responseHeaders from "@/helpers/responseHeaders";
 import * as bcrypt from "bcryptjs";
-// import BlackList from "../../../models/_BlackListModel";
 
 export const main = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

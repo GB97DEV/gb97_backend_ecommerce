@@ -1,4 +1,4 @@
-import EnterpriseUser from "../../../../../models/UserModel";
+import User from "@/services/User/src/models/UserModel";
 import connectDatabase from "../../../../../database/mongodb";
 import jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
@@ -31,7 +31,7 @@ export const main = async (event, context) => {
     await connectDatabase();
 
     const { userName, password } = JSON.parse(event.body);
-    const userExist = await EnterpriseUser.findOne({ userName: userName });
+    const userExist = await User.findOne({ userName: userName });
     if (!userExist) {
       let messageError: string;
       if (acceptLanguage === "es") {
@@ -50,7 +50,7 @@ export const main = async (event, context) => {
         }),
       };
     }
-    // Verifica si la contraseña ingresada es correcta
+
     const isPasswordMatched = await bcrypt.compare(
       password,
       userExist.password
@@ -76,7 +76,7 @@ export const main = async (event, context) => {
     }
 
     const token = jwt.sign(
-      { id: userExist.userName },
+      { id: userExist.username },
       "dxfghjbvfcdgfchjlnhvgfdxfhgjhjbhvgcfhgvhjbhvgcfxvf5e4678765453etrftty",
       {
         expiresIn: "1d",
@@ -99,11 +99,8 @@ export const main = async (event, context) => {
         serverMessage: null,
         data: {
           userId: userExist._id,
-          userName: userExist.userName,
+          userName: userExist.username,
           token: token,
-          personId: userExist.personId,
-          organizationId: userExist.organizationId,
-          rol: userExist?.rol,
         },
       }),
     };

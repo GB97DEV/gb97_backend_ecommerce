@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcryptjs";
-import "./../models/OrganizationModel.ts";
-import "./../models/PersonModel.ts";
 
 const UserSchema = new mongoose.Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: true,
     },
@@ -14,7 +12,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Por favor ingresa una contraseña."],
       minLength: [8, "Password debe tener minimo 8 caractere."],
     },
-    userActive: {
+    user_active: {
       type: String,
       enum: ["activo", "inactivo"],
       maxlength: 50,
@@ -22,12 +20,8 @@ const UserSchema = new mongoose.Schema(
     rol: {
       type: String,
       enum: [
-        "supervisor",
-        "operario",
-        "contador",
-        "control de calidad",
-        "vendedor",
-        "cliente",
+        "client",
+        "customer"
       ],
     },
     resetPasswordToken: {
@@ -38,7 +32,7 @@ const UserSchema = new mongoose.Schema(
     },
     num_document: {
       type: String,
-      // required: [true, 'El campo "num_document" es requerido'],
+      //required: [true, 'El campo "num_document" es requerido'],
     },
     name: {
       type: String,

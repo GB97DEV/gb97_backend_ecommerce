@@ -1,7 +1,6 @@
-import User from "../../../models/UserModel";
-import connectDatabase from "../../../database/mongodb";
-import responseHeaders from "./../../../helpers/responseHeaders"; // Importar responseHeaders
-// import UserResetPassword from "../../../models/_UserResetPasswordModel";
+import User from "@/services/User/src/models/UserModel";
+import connectDatabase from "@/database/mongodb";
+import responseHeaders from "@/helpers/responseHeaders";
 
 export const main = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

@@ -1,7 +1,6 @@
-import { handlerPath } from "../../../src/libs/core/HandlerResolver";
-import { authMiddleware } from "../../middleware/authentication";
+import { handlerPath } from "./../../../../libs/core/HandlerResolver";
 
-const base_path: string = "gb97/user";
+const base_path: string = "gb97/ecommerce/user";
 
 const GetAllUsers = {
   handler: `${handlerPath(__dirname)}/Crud/GetAllHandler.main`,

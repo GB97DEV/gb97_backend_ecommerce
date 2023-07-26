@@ -1,6 +1,6 @@
-import User from "../../../models/UserModel";
-import connectDatabase from "../../../database/mongodb";
-import { authMiddleware } from "../../../middleware/authentication";
+import User from "@/services/User/src/models/UserModel";
+import connectDatabase from "@/database/mongodb";
+import { authMiddleware } from "@/middleware/authentication";
 
 export const main = authMiddleware(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

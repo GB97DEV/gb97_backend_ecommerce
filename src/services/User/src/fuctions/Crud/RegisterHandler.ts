@@ -1,5 +1,5 @@
-import User from "../../../../../models/UserModel";
-import connectDatabase from "../../../../../database/mongodb";
+import User from "@/services/User/src/models/UserModel";
+import connectDatabase from "@/database/mongodb";
 import jwt from "jsonwebtoken";
 // import { authMiddleware } from '../../../middleware/authentication';
 

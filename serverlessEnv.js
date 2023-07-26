@@ -11,11 +11,11 @@ module.exports.jwtSecret = () => ({
 module.exports.databaseM = () => ({
   dev: {
     mongoURL:
-      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97Dev?retryWrites=true&w=majority", // ingresar el valor url correcto para dev
+      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97EcommerceDev?retryWrites=true&w=majority", // ingresar el valor url correcto para dev
   },
   prod: {
     mongoURL:
-      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97Prod?retryWrites=true&w=majority",
+      "mongodb+srv://bg97proyectos:nNqnI2iDGfoWD1z2@gb97.vfdyrvl.mongodb.net/gb97EcommerceProd?retryWrites=true&w=majority",
   },
 });
 

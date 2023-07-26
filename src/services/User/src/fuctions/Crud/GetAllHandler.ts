@@ -1,8 +1,5 @@
-import User from "../../../models/UserModel";
-import connectDatabase from "../../../database/mongodb";
-import { authMiddleware } from "../../../middleware/authentication";
-import responseHeaders from "./../../../helpers/responseHeaders";
-import { getAllGeneric } from "../../../helpers/controllers/getAllGenericController";
+import User from "@/services/User/src/models/UserModel";
+import { getAllGeneric } from "@/helpers/controllers/getAllGenericController";
 
 export const main = async (event, context) => {
   const acceptLanguage =
