@@ -10,10 +10,10 @@ import {
   DeleteUser,
   UpdateUsers,
   GetAllUsers,
-} from "./../../services/User/src/fuctions";
+} from "./src/fuctions";
 
 const serverlessConfiguration: AWS = {
-  service: "microserv-ecommerce-bg97",
+  service: "musrv-pv-bg97",
   frameworkVersion: "3",
   plugins: [
     "serverless-esbuild",

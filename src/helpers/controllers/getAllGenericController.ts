@@ -1,8 +1,8 @@
 import connectDatabase from "../../database/mongodb";
 import customMessage from "../customMessage";
-import { applyPagination } from "./../pagination";
-import responseHeaders from "./../responseHeaders";
-import extractFieldValidations from "./../fieldValidation";
+import { applyPagination } from "../pagination";
+import responseHeaders from "../responseHeaders";
+import extractFieldValidations from "../fieldValidation";
 
 export const getAllGeneric = async (
   Model,

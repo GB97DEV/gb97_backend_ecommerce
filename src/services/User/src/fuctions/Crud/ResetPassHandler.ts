@@ -1,6 +1,5 @@
 import User from "@/services/User/src/models/UserModel";
 import connectDatabase from "@/database/mongodb";
-import crypto from "crypto";
 import { sendEmail } from "@/utils/email";
 import responseHeaders from "@/helpers/responseHeaders";
 import * as bcrypt from "bcryptjs";
@@ -14,10 +13,8 @@ export const main = async (event, context) => {
   try {
     await connectDatabase();
     // Buscar usuario por correo electrónico
-    const { userName } = JSON.parse(event.body);
-    const user = await User.findOne({ userName: userName }).populate(
-      "personId"
-    );
+    const { username } = JSON.parse(event.body);
+    const user = await User.findOne({ username: username });
     let messageError: string;
     if (acceptLanguage === "es") {
       messageError = "El usuario ingresado no existe.";
@@ -54,7 +51,7 @@ export const main = async (event, context) => {
       messageSendEmail = `Your reset code is: ${value}`;
     }
     await sendEmail({
-      to: user.personId.email,
+      to: user.email,
       subject: "Password Reset Request",
       text: messageSendEmail,
     });

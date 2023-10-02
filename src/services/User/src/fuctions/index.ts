@@ -1,6 +1,6 @@
-import { handlerPath } from "./../../../../libs/core/HandlerResolver";
+import { handlerPath } from "../../../../libs/core/HandlerResolver";
 
-const base_path: string = "gb97/ecommerce/user";
+const base_path: string = "gb97/punto-venta/user";
 
 const GetAllUsers = {
   handler: `${handlerPath(__dirname)}/Crud/GetAllHandler.main`,

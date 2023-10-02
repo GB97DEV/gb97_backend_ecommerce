@@ -1,9 +1,8 @@
 import User from "@/services/User/src/models/UserModel";
 import connectDatabase from "@/database/mongodb";
-import jwt from "jsonwebtoken";
-// import { authMiddleware } from '../../../middleware/authentication';
+import { authMiddleware } from '../../../../../middleware/authentication';
 
-export const main = async (event, context) => {
+export const main = authMiddleware(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const headers = {
@@ -16,8 +15,8 @@ export const main = async (event, context) => {
   try {
     await connectDatabase();
     //Check if the user already exist or not
-    const { userName } = JSON.parse(event.body);
-    const userExist = await User.findOne({ userName: userName });
+    const { username } = JSON.parse(event.body);
+    const userExist = await User.findOne({ userName: username });
     if (userExist) {
       return {
         statusCode: 201,
@@ -31,15 +30,6 @@ export const main = async (event, context) => {
       };
     }
 
-    //JWT
-    const token = await jwt.sign(
-      { id: event.body.user },
-      "HKHVHJVKBKJKJBKBKHKBMKHB",
-      {
-        expiresIn: "1d",
-      }
-    );
-
     //Register
     const reqUserObj = JSON.parse(event.body);
     let userObj = { ...reqUserObj };
@@ -49,7 +39,6 @@ export const main = async (event, context) => {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        // token: token,
         response: true,
         message: "Usuario creado exitosamente.",
         serverMessage: null,
@@ -69,4 +58,4 @@ export const main = async (event, context) => {
       }),
     };
   }
-};
+});

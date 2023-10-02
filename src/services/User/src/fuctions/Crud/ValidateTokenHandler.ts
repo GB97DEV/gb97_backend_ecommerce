@@ -1,30 +1,35 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
+import { authMiddleware } from "@/middleware/authentication";
 
 const validateToken = async (authorizationHeader) => {
   if (!authorizationHeader) {
-    return { isValid: false, message: 'No se proporcionó un token en la cabecera de autorización.' };
+    return {
+      isValid: false,
+      message: "No se proporcionó un token en la cabecera de autorización.",
+    };
   }
 
   const token = authorizationHeader;
-  
+
   try {
-    jwt.verify(token, 'HKHVHJVKBKJKJBKBKHKBMKHB');
-    return { isValid: true, message: 'Token válido y no caducado.' };
+    jwt.verify(token, "HKHVHJVKBKJKJBKsd23234324fsdfdsfsddfdsfBKHKBMKHB");
+    return { isValid: true, message: "Token válido y no caducado." };
   } catch (err) {
-    if (err.name === 'TokenExpiredError') {
-      return { isValid: false, isExpired: true, message: 'Token caducado.' };
+    if (err.name === "TokenExpiredError") {
+      return { isValid: false, isExpired: true, message: "Token caducado." };
     } else {
-      return { isValid: false, message: 'Token no válido.' };
+      return { isValid: false, message: "Token no válido." };
     }
   }
 };
 
-export const main = async (event, context) => {
+export const main = authMiddleware(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const headers = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Requested-With",
     "Access-Control-Allow-Methods": "POST,GET",
   };
 
@@ -45,6 +50,4 @@ export const main = async (event, context) => {
       body: JSON.stringify({ error: err.message }),
     };
   }
-};
-
-
+});

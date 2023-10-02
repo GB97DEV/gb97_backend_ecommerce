@@ -1,7 +1,6 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
 import { verify } from "jsonwebtoken";
 
-const secretKey = 'HKHVHJVKBKJKJBKBKHKBMKHB';
+const secretKey = 'HKHVHJVKBKJKJBKsd23234324fsdfdsfsddfdsfBKHKBMKHB';
 
 export const authMiddleware = (handler: any) => {
   return async (event: any, context: any) => {

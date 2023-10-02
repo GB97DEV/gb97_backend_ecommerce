@@ -1,7 +1,6 @@
 import User from "@/services/User/src/models/UserModel";
 import connectDatabase from "@/database/mongodb";
 import responseHeaders from "@/helpers/responseHeaders"; // Importar responseHeaders
-// import UserResetPassword from "../../../models/_UserResetPasswordModel";
 import * as bcrypt from "bcryptjs";
 
 export const main = async (event, context) => {
@@ -14,10 +13,10 @@ export const main = async (event, context) => {
   try {
     await connectDatabase();
 
-    const { userName, password, code } = JSON.parse(event.body);
+    const { username, password, code } = JSON.parse(event.body);
 
     const user = await User.findOne({
-      userName: userName,
+      username: username,
     });
 
     let messageExist: string;
@@ -70,7 +69,7 @@ export const main = async (event, context) => {
         serverMessage: null,
         data: {
           userId: user._id,
-          userName: user.userName,
+          username: user.username,
         },
       }),
     };

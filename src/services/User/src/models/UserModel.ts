@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcryptjs";
+import "./../models/StoreModel.ts";
+import "./../models/OrganizationModel.ts";
 
 const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -15,14 +18,10 @@ const UserSchema = new mongoose.Schema(
     user_active: {
       type: String,
       enum: ["activo", "inactivo"],
-      maxlength: 50,
     },
     rol: {
       type: String,
-      enum: [
-        "client",
-        "customer"
-      ],
+      enum: ["client", "customer"],
     },
     resetPasswordToken: {
       type: String,
@@ -49,6 +48,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       // required: [true, 'El campo "telephoneNumber" es requerido'],
     },
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization"
+    },
+    store: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "_Store"
+    }
   },
   {
     timestamps: true,

@@ -1,7 +1,7 @@
 import connectDatabase from "../../database/mongodb";
 import customMessage from "../customMessage";
-import { applyPagination } from "./../pagination";
-import responseHeaders from "./../responseHeaders";
+import { applyPagination } from "../pagination";
+import responseHeaders from "../responseHeaders";
 
 export const getFilteredGeneric = async (
   Model,

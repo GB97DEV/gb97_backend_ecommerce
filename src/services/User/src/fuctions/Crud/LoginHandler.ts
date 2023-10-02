@@ -30,8 +30,8 @@ export const main = async (event, context) => {
 
     await connectDatabase();
 
-    const { userName, password } = JSON.parse(event.body);
-    const userExist = await User.findOne({ userName: userName });
+    const { username, password } = JSON.parse(event.body);
+    const userExist = await User.findOne({ username: username }).populate(["organization","store"]).lean();;
     if (!userExist) {
       let messageError: string;
       if (acceptLanguage === "es") {
@@ -77,7 +77,7 @@ export const main = async (event, context) => {
 
     const token = jwt.sign(
       { id: userExist.username },
-      "dxfghjbvfcdgfchjlnhvgfdxfhgjhjbhvgcfhgvhjbhvgcfxvf5e4678765453etrftty",
+      "HKHVHJVKBKJKJBKsd23234324fsdfdsfsddfdsfBKHKBMKHB",
       {
         expiresIn: "1d",
       }
@@ -101,6 +101,7 @@ export const main = async (event, context) => {
           userId: userExist._id,
           userName: userExist.username,
           token: token,
+          userExist
         },
       }),
     };

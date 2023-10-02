@@ -13,7 +13,7 @@ export const main = authMiddleware(async (event, context) => {
   try {
     await connectDatabase();
     const { _id } = event.pathParameters;
-    const userObj = await User.findOne({ _id: _id }).populate("personId");
+    const userObj = await User.findOne({ _id: _id }).populate(["organization","store"]).lean();;
 
     if (userObj) {
       return {
