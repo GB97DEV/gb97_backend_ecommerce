@@ -4,6 +4,7 @@ import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
+import Organization from "../../models/OrganizationModel";
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -19,10 +20,10 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = [];
+  const referenceKeys = ["organization"];
 
   for (const referenceKey of referenceKeys) {
-    const RefModel = Category;
+    const RefModel = Organization;
 
     pipeline.push({
       $lookup: {

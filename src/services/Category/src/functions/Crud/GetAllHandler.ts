@@ -1,6 +1,5 @@
 import Category from "../../models/CategoryModel";
 
-
 import { getAllGeneric } from "../../../../../helpers/controllers/getAllGenericController";
 import { authMiddleware } from "../../../../../middleware/authentication";
 
