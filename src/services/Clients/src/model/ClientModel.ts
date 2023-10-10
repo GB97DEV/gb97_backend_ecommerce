@@ -1,14 +1,20 @@
 import mongoose from "mongoose";
 import "./../model/OrganizationModel.ts";
+import counterModel from "./../../../../helpers/counterModel.js";
 
 const ClientSchema = new mongoose.Schema(
   {
-    clientId: {
-      type: String,
+    Id: {
+      type: Number,
+      unique: true,
     },
     clientStatus: {
       type: Number,
       default: 1,
+    },
+    type_document: {
+      type: Number,
+      required: [true, 'El campo "type_document" es requerido'],
     },
     num_document: {
       type: String,
@@ -17,12 +23,6 @@ const ClientSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'El campo "name" es requerido'],
-    },
-    lastName: {
-      type: String,
-    },
-    businessName: {
-      type: String,
     },
     email: {
       type: String,
@@ -39,6 +39,14 @@ const ClientSchema = new mongoose.Schema(
     type: {
       type: Number,
       required: [true, 'El campo "type" es requerido'],
+    },
+    liveUpdate: {
+      type: Boolean,
+      required: [true, 'El campo "liveUpdate" es requerido'],
+    },
+    offlineUpdate: {
+      type: Boolean,
+      required: [true, 'El campo "offlineUpdate" es requerido'],
     },
     organization: {
       type: mongoose.Schema.Types.ObjectId,
