@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import counterModel from "./../../../../helpers/counterModel.js";
 import "./OrganizationModel";
 
-const CategorySchema = new mongoose.Schema(
+const BrandSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
@@ -15,16 +16,25 @@ const CategorySchema = new mongoose.Schema(
       type: String,
       required: [true, "El campo 'description' es requerido"],
     },
-    imageUrl:{
+    website: {
       type: String,
+    },
+    phone: {
+      type: String,
+    },
+    email: {
+      type: String
+    },
+    logo_url: {
+      type: String
     },
     liveUpdate: {
       type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"],
+      required: [true, "El campo 'liveUpdate' es requerido"]
     },
     offlineUpdate: {
       type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"],
+      required: [true, "El campo 'offlineUpdate' es requerido"]
     },
     organization: {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,5 +46,7 @@ const CategorySchema = new mongoose.Schema(
   }
 );
 
-const Category = mongoose.model("Category", CategorySchema);
-export default Category;
+
+const Brand = mongoose.model("Brand", BrandSchema);
+export default Brand;
+

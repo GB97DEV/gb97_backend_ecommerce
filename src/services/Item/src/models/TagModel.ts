@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import counterModel from "./../../../../helpers/counterModel.js";
 import "./OrganizationModel";
 
-const CategorySchema = new mongoose.Schema(
+const TagSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
@@ -12,10 +13,6 @@ const CategorySchema = new mongoose.Schema(
       required: [true, "El campo 'name' es requerido"],
     },
     description: {
-      type: String,
-      required: [true, "El campo 'description' es requerido"],
-    },
-    imageUrl:{
       type: String,
     },
     liveUpdate: {
@@ -36,5 +33,5 @@ const CategorySchema = new mongoose.Schema(
   }
 );
 
-const Category = mongoose.model("Category", CategorySchema);
-export default Category;
+const Tag = mongoose.model("Tag", TagSchema);
+export default Tag;

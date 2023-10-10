@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+import counterModel from "./../../../../helpers/counterModel.js";
 import "./OrganizationModel";
 
-const CategorySchema = new mongoose.Schema(
+const SubCategorySchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
+      required: [true, "El campo 'Id' es requerido"],
     },
     name: {
       type: String,
@@ -36,5 +37,6 @@ const CategorySchema = new mongoose.Schema(
   }
 );
 
-const Category = mongoose.model("Category", CategorySchema);
-export default Category;
+
+const SubCategory = mongoose.model("SubCategory", SubCategorySchema);
+export default SubCategory;
