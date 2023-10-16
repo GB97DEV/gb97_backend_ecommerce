@@ -1,5 +1,6 @@
 import Item from "../../models/ItemModel";
 import Store from "../../models/StoreModel";
+import Organization from "../../models/OrganizationModel";
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
@@ -20,10 +21,19 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["store"];
+  const referenceKeys = ["organization.organizationUuid","store.storeUuid"];
+  const referenceMaps = {
+    "organization.organizationUuid": {
+      model: Organization,
+    },
+    "store.storeUuid": {
+      model: Store,
+    },
+  }
 
   for (const referenceKey of referenceKeys) {
-    const RefModel = Store;
+    const reference = referenceMaps[referenceKey];
+    const RefModel = reference.model;
 
     pipeline.push({
       $lookup: {

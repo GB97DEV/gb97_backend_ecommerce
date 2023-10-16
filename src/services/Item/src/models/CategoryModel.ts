@@ -1,6 +1,20 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
 
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
+
 const CategorySchema = new mongoose.Schema(
   {
     Id: {
@@ -18,17 +32,12 @@ const CategorySchema = new mongoose.Schema(
     imageUrl:{
       type: String,
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"],
-    },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"],
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"],
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
+      type: OrganizationDetails
     },
   },
   {

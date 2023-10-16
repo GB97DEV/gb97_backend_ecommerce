@@ -1,50 +1,60 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
 import "./ItemModel";
-import "./SupplierModel"
+import "./StoreModel"
 
-const InventoryRecordsSchema = new mongoose.Schema(
-  {
-    date: {
-      type: String,
-      default: new Date().toISOString(),
-    },
-    expirationDate: {
-      type: String,
-      default: new Date().toISOString(),
-    },
-    documentUrl: {
-      type: String,
-      default: ""
-    },
-    documentNumber:{
-      type: String,
-      default: ""
-    },
-    quantity: {
-      type: Number,
-      default: 0
-    },
-    cost: {
-      type: Number,
-      default: 0
-    }
+const ItemDetails = new mongoose.Schema({
+  itemId:{
+    type: Number,
+    default: null
+  },
+  itemUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Item",
+    default: null,
   }
-);
+},{
+  _id: false,
+});
+
+const StoreDetails = new mongoose.Schema({
+  storeId:{
+    type: Number,
+    default: null
+  },
+  storeUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "_Store",
+    default: null,
+  }
+},{
+  _id: false,
+});
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId:{
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "",
+    default: null,
+  }
+},{
+  _id: false,
+});
+
 
 const InventorySchema = new mongoose.Schema(
   {
-    supplierId:{
+    Id:{
       type: Number,
       unique: true,
     },
-    supplier: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Supplier"
-    },
     quantity:{
       type: Number,
-      default: 0,
+      required: [true, "El campo 'quantity' es requerido"]
     },
     minStock:{
       type: Number,
@@ -58,23 +68,18 @@ const InventorySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    record: [
-      {
-        type: InventoryRecordsSchema
-      }
-    ],
+    syncStatus: {
+      type: Number
+    },
     item: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Item"
+      type: ItemDetails,
+    },
+    store: {
+      type: StoreDetails
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization"
+      type: OrganizationDetails
     },
-    // store: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Store"
-    // } //Talvez inventario de la sucursal y no de la tienda
   },
   {
     timestamps: true,

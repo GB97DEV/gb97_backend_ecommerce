@@ -5,6 +5,7 @@ import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
 import Organization from "../../models/OrganizationModel";
+import Category from "../../models/CategoryModel"
 
 export const main = authMiddleware(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -20,10 +21,23 @@ export const main = authMiddleware(async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization"];
-
+  const referenceKeys = ["organization.organizationUuid","category.categoryUuid"];
+  const referenceMaps = {
+    "organization.organizationUuid": {
+      model: Organization,
+    },
+    "category.categoryUuid": {
+      model: Category,
+    },
+  }
   for (const referenceKey of referenceKeys) {
-    const RefModel = Organization
+    const reference = referenceMaps[referenceKey];
+    const RefModel = reference.model;
+
+    if (!RefModel) {
+      console.error(`No se encontró una clase correspondiente para ${referenceKey}`);
+      continue;
+    }
 
     pipeline.push({
       $lookup: {

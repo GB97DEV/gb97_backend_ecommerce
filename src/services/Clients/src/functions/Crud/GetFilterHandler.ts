@@ -57,7 +57,7 @@ export const main = authMiddleware(async (event, context) => {
     pipeline.push({ $match: createdAtQuery });
   }
 
-  const referenceKeys = ["organization"]; // Explicitly define the reference keys
+  const referenceKeys = ["organization.organizationUuid"]; // Explicitly define the reference keys
 
   for (const referenceKey of referenceKeys) {
     const RefModel = Organization; // Explicitly define the RefModel

@@ -1,8 +1,35 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcryptjs";
-import counterModel from "./../../../../helpers/counterModel.js";
-import "./../models/StoreModel.ts";
-import "./../models/OrganizationModel.ts";
+import "./StoreModel";
+import "./OrganizationModel";
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
+
+const StoreDetails = new mongoose.Schema({
+  storeId:{
+    type: Number,
+    default: null
+  },
+  storeUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "_Store",
+    default: null
+  }
+},{
+  _id: false
+});
 
 const UserSchema = new mongoose.Schema(
   {
@@ -30,9 +57,9 @@ const UserSchema = new mongoose.Schema(
     },
     offlineCodeStatus:{
       type: Number,
-
+      required: [true, "El campo 'offlineCodeStatus' es requerido"],
     },
-    user_active: {
+    userActive: {
       type: String,
       enum: ["activo", "inactivo"],
     },
@@ -40,13 +67,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "store_supervisor", "client", "customer"],
     },
-    num_document: {
+    numDocument: {
       type: String,
-      //required: [true, 'El campo "num_document" es requerido'],
+      required: [true, 'El campo "numDocument" es requerido'],
     },
     name: {
       type: String,
-      // required: [true, 'El campo "name" es requerido'],
+      required: [true, 'El campo "name" es requerido'],
     },
     email: {
       type: String,
@@ -65,21 +92,18 @@ const UserSchema = new mongoose.Schema(
     resetPasswordExpires: {
       type: Number,
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"]
+    lastTimeSync:{
+      type: String
     },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"]
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"]
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization"
+      type: OrganizationDetails
     },
     store: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "_Store"
+      type: StoreDetails,
     }
   },
   {

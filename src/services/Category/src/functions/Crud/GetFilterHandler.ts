@@ -20,7 +20,7 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization"];
+  const referenceKeys = ["organization.organizationUuid"];
 
   for (const referenceKey of referenceKeys) {
     const RefModel = Organization;

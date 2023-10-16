@@ -4,7 +4,7 @@ import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import { authMiddleware } from "../../../../../middleware/authentication";
 
-export const main = async (event, context) => {
+export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const acceptLanguage =
     event.headers["Accept-Language"] ||
@@ -44,4 +44,4 @@ export const main = async (event, context) => {
       body: JSON.stringify({ error: err.message }),
     };
   }
-};
+});

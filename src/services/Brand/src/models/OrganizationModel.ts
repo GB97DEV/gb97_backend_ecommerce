@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import counterModel from "./../../../../helpers/counterModel.js";
 
 const OrganizationSchema = new mongoose.Schema(
   {
@@ -58,14 +57,10 @@ const OrganizationSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"]
-    },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"]
-    },
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"]
+    }
   },
   {
     timestamps: true,

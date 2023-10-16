@@ -1,6 +1,19 @@
 import mongoose from "mongoose";
-import counterModel from "./../../../../helpers/counterModel.js";
-import "./../models/OrganizationModel";
+import "./OrganizationModel";
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
 
 const StoreSchema = new mongoose.Schema(
   {
@@ -8,32 +21,30 @@ const StoreSchema = new mongoose.Schema(
       type: Number,
       unique: true,
     },
-    store_name: {
+    storeName: {
       type: String,
       maxlength: 50,
       required: [true, "El campo 'store_name' es requerido."],
     },
-    owner_name: {
+    ownerName: {
       type: String,
       maxlength: 50,
       required: [true, "El campo 'owner_namer' es requerido."],
     },
-    owner_num_document:{
+    ownerNumDocument:{
       type: String,
       required: [true, "El campo 'owner_num_document' es requerido"]
     },
-    owner_email: {
+    ownerEmail: {
       type: String
     },
     address: { 
       type: String, 
-      default: null, 
       maxlength: 255,
       required: [true, "El campo 'addresss' es requerido."],
     },
     email: { 
       type: String, 
-      default: null, 
       maxlength: 100,
       required: [true, "El campo 'email' es requerido."],
     },
@@ -45,17 +56,12 @@ const StoreSchema = new mongoose.Schema(
       type: String, 
       enum: ['0', '1'], 
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"]
-    },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"]
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"]
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization"
+      type: OrganizationDetails,
     }
   },
   {

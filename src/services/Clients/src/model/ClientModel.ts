@@ -1,6 +1,19 @@
 import mongoose from "mongoose";
-import "./../model/OrganizationModel.ts";
-import counterModel from "./../../../../helpers/counterModel.js";
+import "./OrganizationModel";
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
 
 const ClientSchema = new mongoose.Schema(
   {
@@ -12,13 +25,9 @@ const ClientSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
-    type_document: {
-      type: Number,
-      required: [true, 'El campo "type_document" es requerido'],
-    },
-    num_document: {
+    numDocument: {
       type: String,
-      required: [true, 'El campo "num_document" es requerido'],
+      required: [true, 'El campo "numDocument" es requerido'],
     },
     name: {
       type: String,
@@ -26,11 +35,9 @@ const ClientSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'El campo "email" es requerido'],
     },
     telephoneNumber: {
       type: String,
-      required: [true, 'El campo "telephoneNumber" es requerido'],
     },
     address: {
       type: String,
@@ -40,17 +47,12 @@ const ClientSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'El campo "type" es requerido'],
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, 'El campo "liveUpdate" es requerido'],
-    },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, 'El campo "offlineUpdate" es requerido'],
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"]
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
+      type: OrganizationDetails
     },
   },
   {

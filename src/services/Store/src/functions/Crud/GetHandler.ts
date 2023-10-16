@@ -1,5 +1,4 @@
 import Store from "../../models/StoreModel";
-import User from "../../models/UserModel";
 
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
@@ -22,8 +21,6 @@ export const main = authMiddleware(async (event, context) => {
     const { _id } = event.pathParameters;
     const Obj = await Store.findById(_id).populate(["organization"]).lean();
     if (Obj) {
-      const ObjUser = await User.find({store: _id}).select('code name num_document email rol');
-      Obj.storeUsers = ObjUser;
       const message = customMessage(Obj, "g", acceptLanguage);
       const body = {
         ...message,

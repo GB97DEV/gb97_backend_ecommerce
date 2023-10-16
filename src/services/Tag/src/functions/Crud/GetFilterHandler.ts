@@ -1,10 +1,11 @@
 import Tag from "../../models/TagModel";
+import Organization from "../../models/OrganizationModel";
+import SubCategory from "../../models/SubCategoryModel";
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
-import Organization from "../../models/OrganizationModel";
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -20,10 +21,18 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization"];
-
+  const referenceKeys = ["organization.organizationUuid","subcategory.subcategoryUuid"];
+  const referenceMaps = {
+    "organization.organizationUuid": {
+      model: Organization,
+    },
+    "subcategory.subcategoryUuid": {
+      model: SubCategory,
+    },
+  }
   for (const referenceKey of referenceKeys) {
-    const RefModel = Organization;
+    const reference = referenceMaps[referenceKey];
+    const RefModel = reference.model;
 
     pipeline.push({
       $lookup: {

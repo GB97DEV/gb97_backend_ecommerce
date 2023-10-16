@@ -1,6 +1,33 @@
 import mongoose from "mongoose";
-import counterModel from "./../../../../helpers/counterModel.js";
 import "./OrganizationModel";
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
+
+const SubCategoryDetails = new mongoose.Schema({
+  subcategoryId: {
+    type: Number,
+    default: null
+  },
+  subcategoryUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "SubCategory",
+    default: null
+  }
+},{
+  _id: false
+});
 
 const TagSchema = new mongoose.Schema(
   {
@@ -15,17 +42,15 @@ const TagSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    liveUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'liveUpdate' es requerido"],
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"],
     },
-    offlineUpdate: {
-      type: Boolean,
-      required: [true, "El campo 'offlineUpdate' es requerido"],
+    subcategory: {
+      type: SubCategoryDetails
     },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
+      type: OrganizationDetails
     },
   },
   {
