@@ -1,8 +1,11 @@
 import Organization from "../../models/OrganizationModel";
 import Store from "../../models/StoreModel";
+import Supplier from "../../models/SupplierModel";
+
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
+
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
 
@@ -20,10 +23,19 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization.organizationUuid"];
+  const referenceKeys = ["organization.organizationUuid","suppliers.supplierOfficeUuid"];
+  const referenceMaps = {
+    "organization.organizationUuid": {
+      model: Organization,
+    },
+    "suppliers.supplierOfficeUuid": {
+      model: Supplier,
+    },
+  }
 
   for (const referenceKey of referenceKeys) {
-    const RefModel = Organization;
+    const reference = referenceMaps[referenceKey];
+    const RefModel = reference.model;
 
     pipeline.push({
       $lookup: {
