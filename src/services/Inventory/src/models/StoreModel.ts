@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
+import "./SupplierModel";
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -15,11 +16,25 @@ const OrganizationDetails = new mongoose.Schema({
   _id: false // Configura _id como false para el esquema OrganizationDetails
 });
 
+const SupplierBranchDetails = new mongoose.Schema({
+  supplierOfficeId: {
+    type: Number,
+    default: null,
+  },
+  supplierOfficeUuid:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Supplier",
+    default: null,
+  }
+},{
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+})
+
+
 const StoreSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     storeName: {
       type: String,
@@ -43,10 +58,19 @@ const StoreSchema = new mongoose.Schema(
       maxlength: 255,
       required: [true, "El campo 'addresss' es requerido."],
     },
+    lat: {
+      type: Number
+    },
+    lng: {
+      type: Number
+    },
     email: { 
       type: String, 
       maxlength: 100,
       required: [true, "El campo 'email' es requerido."],
+    },
+    storeLogo: {
+      type: String
     },
     phone: {
       type: String,
@@ -60,6 +84,11 @@ const StoreSchema = new mongoose.Schema(
       type: Number,
       required: [true, "El campo 'syncStatus' es requerido"]
     },
+    suppliers: [
+      {
+        type: SupplierBranchDetails
+      }
+    ],
     organization: {
       type: OrganizationDetails,
     }

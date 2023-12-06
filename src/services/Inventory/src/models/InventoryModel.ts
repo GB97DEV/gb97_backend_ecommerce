@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
 import "./ItemModel";
-import "./StoreModel"
+import "./StoreModel";
+import "./SupplierModel";
+import "./CategoryModel";
+import "./SubCategoryModel";
 
 const ItemDetails = new mongoose.Schema({
   itemId:{
@@ -11,6 +14,24 @@ const ItemDetails = new mongoose.Schema({
   itemUuid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Item",
+    default: null,
+  },
+  categoryId:{
+    type: Number,
+    default: null
+  },
+  categoryUuid:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    default: null,
+  },
+  subcategoryId: {
+    type: Number,
+    default: null
+  },
+  subcategoryUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "SubCategory",
     default: null,
   }
 },{
@@ -38,19 +59,37 @@ const OrganizationDetails = new mongoose.Schema({
   },
   organizationUuid: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "",
+    ref: "Organization",
     default: null,
   }
 },{
   _id: false,
 });
 
+const SupplierBranchDetails = new mongoose.Schema({
+  supplierBranchId:{
+    type: Number,
+    default: null
+  },
+  supplierBranchUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Supplier",
+    default: null,
+  }
+},{
+  _id: false,
+});
 
 const InventorySchema = new mongoose.Schema(
   {
     Id:{
       type: Number,
-      unique: true,
+    },
+    price: {
+      type: Number,
+    },
+    discount: {
+      type: Number,
     },
     quantity:{
       type: Number,
@@ -80,6 +119,11 @@ const InventorySchema = new mongoose.Schema(
     organization: {
       type: OrganizationDetails
     },
+    suppliers: [
+      {
+        type: SupplierBranchDetails
+      }
+    ]
   },
   {
     timestamps: true,

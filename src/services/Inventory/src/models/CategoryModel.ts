@@ -19,15 +19,19 @@ const CategorySchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     name: {
       type: String,
       required: [true, "El campo 'name' es requerido"],
     },
+    importName: {
+      type: String,
+    },
+    shortName: {
+      type: String,
+    },
     description: {
       type: String,
-      required: [true, "El campo 'description' es requerido"],
     },
     imageUrl:{
       type: String,
