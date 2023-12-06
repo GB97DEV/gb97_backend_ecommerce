@@ -1,36 +1,49 @@
 import mongoose from "mongoose";
-import "./../models/OrganizationModel.ts";
+import "./OrganizationModel";
+
+const OrganizationDetails = new mongoose.Schema({
+  organizationId: {
+    type: Number,
+    default: null
+  },
+  organizationUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization",
+    default: null,
+  }
+}, {
+  _id: false // Configura _id como false para el esquema OrganizationDetails
+});
 
 const ClientSchema = new mongoose.Schema(
   {
-    clientId: {
-      type: String,
+    Id: {
+      type: Number,
     },
     clientStatus: {
       type: Number,
       default: 1,
     },
-    num_document: {
+    numDocument: {
       type: String,
-      required: [true, 'El campo "num_document" es requerido'],
+      required: [true, 'El campo "numDocument" es requerido'],
+    },
+    typeDocument: {
+      type: Number,
+      required: [true, 'El campo "typeDocument" es requerido'],
     },
     name: {
       type: String,
       required: [true, 'El campo "name" es requerido'],
     },
-    lastName: {
-      type: String,
-    },
     businessName: {
-      type: String,
+      type: String
     },
     email: {
       type: String,
-      required: [true, 'El campo "email" es requerido'],
     },
     telephoneNumber: {
       type: String,
-      required: [true, 'El campo "telephoneNumber" es requerido'],
     },
     address: {
       type: String,
@@ -40,9 +53,12 @@ const ClientSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'El campo "type" es requerido'],
     },
+    syncStatus: {
+      type: Number,
+      required: [true, "El campo 'syncStatus' es requerido"]
+    },
     organization: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
+      type: OrganizationDetails
     },
   },
   {

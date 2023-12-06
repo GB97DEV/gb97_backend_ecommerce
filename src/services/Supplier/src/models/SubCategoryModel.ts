@@ -34,7 +34,6 @@ const SubCategorySchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      required: [true, "El campo 'Id' es requerido"],
     },
     name: {
       type: String,

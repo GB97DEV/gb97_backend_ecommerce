@@ -5,13 +5,8 @@ import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
 import Organization from "../../models/OrganizationModel";
-import Brand from "../../models/BrandModel";
-import Category from "../../models/CategoryModel";
-import SubCategory from "../../models/SubCategoryModel";
-import Tag from "../../models/TagModel";
-import Store from "../../models/StoreModel";
-
-
+import Item from "../../models/ItemModel";
+import InventoryRegistration from "../../models/InventoryRegistrationModel";
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -29,32 +24,12 @@ export const main = authMiddleware( async (event, context) => {
 
   const referenceKeys = [
     "organization.organizationUuid",
-    "brands.brandUuid", 
-    "categories.categoryUuid", 
-    "subcategories.subcategoryUuid",
-    "tags.tagUuid",
-    "affiliatedStores.storeUuid"
   ];
 
   const referenceMaps = {
     "organization.organizationUuid": {
       model: Organization,
     },
-    "brands.brandUuid": {
-      model: Brand,
-    },
-    "categories.categoryUuid": {
-      model: Category
-    },
-    "subcategories.subcategoryUuid": {
-      model: SubCategory
-    },
-    "tags.tagUuid": {
-      model: Tag 
-    },
-    "affiliatedStores.storeUuid": {
-      model: Store
-    }
   }
 
   for (const referenceKey of referenceKeys) {
@@ -111,7 +86,16 @@ export const main = authMiddleware( async (event, context) => {
       };
     }
 
-    const message = customMessage(data, "ga", acceptLanguage);
+    const newData = await Promise.all(data.map(async item => {
+      const items = await Item.find({"supplier.supplierUuid": item._id})
+      const orders = await InventoryRegistration.find({"supplier.supplierUuid": item._id})
+      return {
+        ...item,
+        items,
+        orders
+      }
+    }));
+    const message = customMessage(newData, "ga", acceptLanguage);
     const body = { ...message, pagination };
 
     return {

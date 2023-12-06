@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import "./InventoryModel";
-import "./SupplierBranchModel";
+import "./SupplierModel";
 import "./OrganizationModel";
+import "./SellingModel";
 
 const InventoryDetails = new mongoose.Schema({
   inventoryId: {
@@ -10,21 +11,35 @@ const InventoryDetails = new mongoose.Schema({
   },
   inventoryUuid: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Invetory",
+    ref: "Inventory",
     default: null,
   }
 }, {
   _id: false
 });
 
-const SupplierBranchDetails = new mongoose.Schema({
-  supplierBranchId: {
+const SupplierDetails = new mongoose.Schema({
+  supplierId: {
     type: Number,
     default: null
   },
-  supplierBranchUuid: {
+  supplierUuid: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "SupplierBranch",
+    ref: "Supplier",
+    default: null
+  }
+},{
+  _id: false
+});
+
+const SellingDetails = new mongoose.Schema({
+  sellingId: {
+    type: Number,
+    default: null
+  },
+  sellingUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Selling",
     default: null
   }
 },{
@@ -45,11 +60,14 @@ const OrganizationDetails = new mongoose.Schema({
   _id: false // Configura _id como false para el esquema OrganizationDetails
 });
 
-const ReplenishmentHistorySchema = new mongoose.Schema(
+const InventoryRegistrationSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
+    },
+    registryType:{
+      type: Number,
+      required: [true, "El campo 'registryType' es requerido"]
     },
     date: {
       type: String,
@@ -65,13 +83,21 @@ const ReplenishmentHistorySchema = new mongoose.Schema(
     },
     cost: {
       type: Number,
-      required: [true, "El campo 'cost' es requerido"]
+    },
+    payment: {
+      type: Object,
+    },
+    totalPayment:{
+      type: Number
     },
     documentUrl: {
       type: String
     },
     documentNumber: {
       type: String
+    },
+    comments: {
+      type: String,
     },
     syncStatus: {
       type: Number,
@@ -80,8 +106,11 @@ const ReplenishmentHistorySchema = new mongoose.Schema(
     inventory: {
       type: InventoryDetails,
     },
-    supplierbranch: {
-      type: SupplierBranchDetails
+    supplier: {
+      type: SupplierDetails
+    },
+    selling:{
+      type: SellingDetails,
     },
     organization: {
       type: OrganizationDetails
@@ -93,6 +122,6 @@ const ReplenishmentHistorySchema = new mongoose.Schema(
 );
 
 
-const ReplenishmentHistory = mongoose.model("ReplenishmentHistory", ReplenishmentHistorySchema);
-export default ReplenishmentHistory;
+const InventoryRegistration = mongoose.model("InventoryRegistration", InventoryRegistrationSchema);
+export default InventoryRegistration;
 

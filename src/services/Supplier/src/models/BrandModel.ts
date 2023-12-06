@@ -19,10 +19,10 @@ const BrandSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     name: {
       type: String,
+      unique: true,
       required: [true, "El campo 'name' es requerido"],
     },
     description: {
