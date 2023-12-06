@@ -6,6 +6,7 @@ import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
+import Supplier from "../../models/SupplierModel";
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -21,7 +22,11 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization.organizationUuid","store.storeUuid"];
+  const referenceKeys = [
+    "organization.organizationUuid",
+    "store.storeUuid",
+    "supplier.supplierUuid"
+  ];
   const referenceMaps = {
     "organization.organizationUuid": {
       model: Organization,
@@ -29,6 +34,9 @@ export const main = authMiddleware( async (event, context) => {
     "store.storeUuid": {
       model: Store,
     },
+    "supplier.supplierUuid":{
+      model: Supplier,
+    }
   }
 
   for (const referenceKey of referenceKeys) {

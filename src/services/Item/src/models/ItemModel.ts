@@ -6,6 +6,7 @@ import "./OrganizationModel";
 import "./StoreModel";
 import "./SubCategoryModel";
 import "./TagModel";
+import "./SupplierModel";
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -91,11 +92,24 @@ const StoreDetails = new mongoose.Schema({
   _id: false
 });
 
+const SupplierDetails = new mongoose.Schema({
+  supplierId: {
+    type: Number,
+    default: null
+  },
+  supplierUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Supplier",
+    default: null
+  }
+},{
+  _id: false
+});
+
 const ItemSchema = new mongoose.Schema(
   {
     Id:{
       type: Number,
-      unique: true,
     },
     code: {
       type: String,
@@ -116,14 +130,6 @@ const ItemSchema = new mongoose.Schema(
       type: Boolean,
       required: [true, "El campo 'isVat' es requerido"]
     },
-    isService: {
-      type: Boolean,
-      required: [true, "El campo 'isService' es requerido"]
-    },
-    isVariant: {
-      type: Boolean,
-      required: [true, "El campo 'isVariant' es requerido"]
-    },
     imageUrl: {
       type: String
     },
@@ -133,6 +139,9 @@ const ItemSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, "El campo 'price' es requerido"]
+    },
+    priceBy: {
+      type: Number,
     },
     syncStatus:{
       type: Number,
@@ -145,7 +154,7 @@ const ItemSchema = new mongoose.Schema(
     itemCategory: {
       type: CategoryDetails
     },
-    subCategory: {
+    itemSubcategory: {
       type: SubCategoryDetails
     },
     itemTags: [
@@ -156,12 +165,17 @@ const ItemSchema = new mongoose.Schema(
     itemBrand: {
       type: BrandDetails
     },
-    store:{
-      type:StoreDetails
-    },
     organization: {
-      type: OrganizationDetails
-    }
+      type: OrganizationDetails,
+    },
+    store:{
+      type: StoreDetails,
+    },
+    supplier: [
+      {
+        type: SupplierDetails,
+      }
+    ],
   },
   {
     timestamps: true,

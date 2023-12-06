@@ -18,7 +18,13 @@ export const main = authMiddleware(async (event, context) => {
     };
     await connectDatabase();
     const { _id } = event.pathParameters;
-    const Obj = await Item.findById(_id).populate(["store.storeUuid"]).lean();
+    const Obj = await Item.findById(_id).populate([
+      "itemBrand.brandUuid",
+      "itemSubcategory.subcategoryUuid",
+      "itemCategory.categoryUuid",
+      "itemTags.tagUuid"
+    ]).lean();
+
     if (Obj) {
       const message = customMessage(Obj, "g", acceptLanguage);
       const body = {
