@@ -1,11 +1,69 @@
 import mongoose from "mongoose";
 import counterModel from "../../../../helpers/counterModel.js"
 import "./ClientModel";
-import "./StoreModel"
-import "./OrganizationModel"
+import "./StoreModel";
+import "./OrganizationModel";
+import "./UserModel";
+import "./InventoryModel"
+
+const SellingItem = new mongoose.Schema({
+  itemId: {
+    type: Number,
+    default: null
+  },
+  itemUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Item",
+    default: null
+  },
+  itemCode: {
+    type: String,
+  },
+  barcode: {
+    type: String,
+  },
+  itemName: {
+    type: String,
+  },
+  itemIsVat: {
+    type: Boolean,
+  },
+  itemDescription: {
+    type: String,
+  },
+  itemBasePrice: {
+    type: Number,
+  },
+  itemDiscount: {
+    type: Number,
+  },
+  itemQuantity: {
+    type: Number,
+  },
+  itemTotal: {
+    type: Number,
+  },
+  itemComment: {
+    type: String,
+  },
+  itemHasInventoryTrack: {
+    type: Boolean,
+  },
+  inventoryId: {
+    type: Number,
+    defautl: null,
+  },
+  inventoryUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Inventory",
+    default: null
+  },
+},{
+  _id: false,
+})
 
 const ClientDetails = new mongoose.Schema({
-  clietId: {
+  clientId: {
     type: Number,
     default: null
   },
@@ -16,6 +74,20 @@ const ClientDetails = new mongoose.Schema({
   }
 },{
   _id: false
+});
+
+const SellerDetails = new mongoose.Schema({
+  sellerId: {
+    type: Number,
+    default: null,
+  },
+  sellerUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  }
+} ,{
+  _id: false,
 });
 
 const StoreDetails = new mongoose.Schema({
@@ -50,7 +122,6 @@ const SellingSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     code: {
       type: Number
@@ -74,13 +145,29 @@ const SellingSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    invoiceNumber: {
+      type: String,
+    },
+    invoiceUrl: {
+      type: String,
+    },
+    invoiceDate: {
+      type: String,
+    },
+    invoiceEnv: {
+      type: String,
+    },
     clientName: {
       type: String,
       required: [true, "El campo 'clientName' es requerido"]
     },
-    userName: {
+    clientAddress: {
       type: String,
-      required: [true, "El campo 'userName' es requerido"]
+      required: [true, "El campo 'clientAddress' es requerido"]
+    },
+    sellerName: {
+      type: String,
+      required: [true, "El campo 'sellerName' es requerido"]
     },
     discount: {
       type: Number,
@@ -90,7 +177,7 @@ const SellingSchema = new mongoose.Schema(
       type: Number,
       required: [true, "El campo 'charge' es requerido"]
     },
-    payment: {
+    payments: {
       type: Object
     },
     numOfPayments: {
@@ -98,25 +185,30 @@ const SellingSchema = new mongoose.Schema(
       required: [true, "El campo 'numOfPayments' es requerido"]
     },
     dataStatus: {
-      type: Boolean,
-      default: false
+      type: Number,
+      default: 0
     },
     syncStatus: {
       type: Number,
       required: [true, "El campo 'syncStatus' es requerido"]
     },
-    items:{
-      type: Object
-    },
     client: {
-      type: ClientDetails
+      type: ClientDetails,
+    },
+    seller: {
+      type: SellerDetails,
     },
     store: {
       type: StoreDetails
     },
+    items:[
+      {
+        type: SellingItem
+      }
+    ],
     organization: {
       type: OrganizationDetails
-    }
+    },
   },
   {
     timestamps: true
@@ -126,8 +218,12 @@ const SellingSchema = new mongoose.Schema(
 SellingSchema.pre("save", async function (next) {
   let doc = this;
   try {
+    const storeUuid = doc.store?.storeUuid;
+    let counterName = `${storeUuid}SellingPosId`
+    let counterCreate = new counterModel({ _id: counterName, seq: 0 });
+    counterCreate.save().catch((error) => console.log(error));
     let counter = await counterModel.findByIdAndUpdate(
-      "sellingPosId",
+      counterName,
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
@@ -140,6 +236,3 @@ SellingSchema.pre("save", async function (next) {
 
 const Selling = mongoose.model("Selling", SellingSchema);
 export default Selling;
-
-let counter = new counterModel({ _id: "sellingPosId", seq: 0 });
-counter.save().catch((error) => console.log(error));

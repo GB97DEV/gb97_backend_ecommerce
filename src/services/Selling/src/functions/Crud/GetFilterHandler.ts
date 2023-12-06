@@ -1,12 +1,14 @@
 import Organization from "../../models/OrganizationModel";
-import Selling from "../../models/SellingModel";
-import Store from "../../models/StoreModel";
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
 import Client from "../../models/ClientModel";
+import Selling from "../../models/SellingModel";
+import Store from "../../models/StoreModel";
+import User from "../../models/UserModel";
+
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -22,7 +24,7 @@ export const main = authMiddleware( async (event, context) => {
   let query = {};
   const pipeline: any[] = [];
 
-  const referenceKeys = ["organization.organizationUuid","store.storeUuid", "client.clientUuid"];
+  const referenceKeys = ["organization.organizationUuid","store.storeUuid", "client.clientUuid", "seller.sellerUuid"];
   const referenceMaps = {
     "organization.organizationUuid": {
       model: Organization,
@@ -31,7 +33,11 @@ export const main = authMiddleware( async (event, context) => {
       model: Store,
     },
     "client.clientUuid": {
-      model: Client
+      model: Client,
+    },
+    "seller.sellerUuid":{
+      model: User,
+      fields: ["numDocument"]
     }
   }
 
@@ -51,6 +57,7 @@ export const main = authMiddleware( async (event, context) => {
     pipeline.push({
       $unwind: `$${referenceKey}`,
     });
+
   }
 
   for (const [key, value] of filtrosValidos) {
@@ -89,7 +96,23 @@ export const main = authMiddleware( async (event, context) => {
       };
     }
 
-    const message = customMessage(data, "ga", acceptLanguage);
+    //Defino los atirbutos que necesito
+    const modifiedData = data.map(item => ({
+      ...item,
+      seller: {
+        sellerId: item.seller?.sellerUuid?._id || null,
+        sellerUuid: {
+          _id: item.seller?.sellerUuid?._id || "",
+          Id: item.seller?.sellerUuid?.Id || 0,
+          numDocument: item.seller?.sellerUuid?.numDocument || "",
+          name: item.seller?.sellerUuid?.name || "",
+          email: item.seller?.sellerUuid?.email || "",
+          telephoneNumber: item.seller?.sellerUuid?.telephoneNumber || "",
+        },
+      },
+    }));
+    
+    const message = customMessage(modifiedData, "ga", acceptLanguage);
     const body = { ...message, pagination };
 
     return {
