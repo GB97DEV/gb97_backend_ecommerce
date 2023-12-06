@@ -19,7 +19,6 @@ const ClientSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     clientStatus: {
       type: Number,
@@ -29,9 +28,16 @@ const ClientSchema = new mongoose.Schema(
       type: String,
       required: [true, 'El campo "numDocument" es requerido'],
     },
+    typeDocument: {
+      type: Number,
+      required: [true, 'El campo "typeDocument" es requerido'],
+    },
     name: {
       type: String,
       required: [true, 'El campo "name" es requerido'],
+    },
+    businessName: {
+      type: String
     },
     email: {
       type: String,

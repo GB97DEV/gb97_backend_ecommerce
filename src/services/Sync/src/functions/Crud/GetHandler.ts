@@ -5,18 +5,19 @@ import convertData from "../../../../../helpers/reqDataModeling";
 import { authMiddleware } from "../../../../../middleware/authentication";
 import responseHeaders from "../../../../../helpers/responseHeaders";
 
-import Organization from "../../models/OrganizationModel";
-import Client from "../../models/ClientModel";
 import Brand from "../../models/BrandModel";
 import Category from "../../models/CategoryModel";
-import SubCategory from "../../models/SubCategoryModel";
+import Client from "../../models/ClientModel";
 import Inventory from "../../models/InventoryModel";
+import InventoryRegistration from "../../models/InventoryRegistrationModel";
 import Item from "../../models/ItemModel";
-import ReplenishmentHistory from "../../models/ReplenishmentHistoryModel";
-import Supplier from "../../models/SupplierModel";
-import SupplierBranch from "../../models/SupplierBranchModel";
-import Store from "../../models/StoreModel";
+import Organization from "../../models/OrganizationModel";
 import Selling from "../../models/SellingModel";
+import Store from "../../models/StoreModel";
+import SubCategory from "../../models/SubCategoryModel";
+import Supplier from "../../models/SupplierModel";
+import Tag from "../../models/TagModel";
+import User from "../../models/UserModel";
 
 
 export const main = authMiddleware(async (event, context) => {
@@ -61,18 +62,21 @@ export const main = authMiddleware(async (event, context) => {
 
     const StartDate = new Date(lastSync).toISOString();
 
+    const query = {updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}
+
+    const BrandData: any = await Brand.find(query).lean();
+    const CategoryData: any = await Category.find(query).lean();
+    const ClientData: any = await Client.find(query).lean();
+    const InventoryData: any = await Inventory.find(query).lean();
+    const InventoryRegistrationData: any = await InventoryRegistration.find(query).lean();
+    const ItemData: any = await Item.find(query).lean();
     const OrganizationData: any = await Organization.find({updatedAt: {$gte: StartDate},_id: organizationUuid}).lean();
-    const ClientData: any = await Client.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const BrandData: any = await Brand.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const CategoryData: any = await Category.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const SubCategoryData: any = await SubCategory.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const InventoryData: any = await Inventory.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const ItemData: any = await Item.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const StoreData: any = await Store.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const SupplierData: any = await Supplier.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const SellingsData: any = await Selling.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const ReplenishmentHistoryData: any = await ReplenishmentHistory.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
-    const SupplierBranchData: any =await SupplierBranch.find({updatedAt: {$gte: StartDate},organization: {organizationUuid: organizationUuid}}).lean();
+    const SellingsData: any = await Selling.find(query).lean();
+    const StoreData: any = await Store.find(query).lean();
+    const SubCategoryData: any = await SubCategory.find(query).lean();
+    const SupplierData: any = await Supplier.find(query).lean();
+    const TagData: any = await Tag.find(query).lean();
+    const UserData: any = await User.find(query).lean();
 
     const body = {
       organization:{
@@ -115,13 +119,17 @@ export const main = authMiddleware(async (event, context) => {
         data: SellingsData,
         count: SellingsData.length
       },
-      replenishmenthistory: {
-        data: ReplenishmentHistoryData,
-        count: ReplenishmentHistoryData.length
+      inventoryRegistration: {
+        data: InventoryRegistrationData,
+        count: InventoryRegistrationData.length
       },
-      supplierbranch: {
-        data: SupplierBranchData,
-        count: SupplierBranchData.length
+      tag: {
+        data: TagData,
+        count: TagData.length
+      },
+      user: {
+        data: UserData,
+        count: UserData.length
       }
     }
 

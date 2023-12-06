@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
-import "./BrandModel";
-import "./CategoryModel";
-import "./SubCategoryModel";
-import "./TagModel";
-import "./StoreModel";
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -20,85 +15,53 @@ const OrganizationDetails = new mongoose.Schema({
   _id: false // Configura _id como false para el esquema OrganizationDetails
 });
 
-const CategoryDetails = new mongoose.Schema({
-  categoryId: {
-    type: Number,
-    default: null
-  },
-  categoryUuid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    default: null,
-  }
-}, {
-  _id: false // Configura _id como false para el esquema OrganizationDetails
-});
-
-const SubCategoryDetails = new mongoose.Schema({
-  subcategoryId: {
-    type: Number,
-    default: null
-  },
-  subcategoryUuid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SubCategory",
-    default: null
-  }
-},{
-  _id: false
-});
-
-const BrandDetails = new mongoose.Schema({
-  brandId: {
-    type: Number,
-    default: null
-  },
-  brandUuid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Brand",
-    default: null
-  }
-},{
-  _id: false
-});
-
-const TagDetails = new mongoose.Schema({
-  tagId: {
-    type: Number,
-    default: null
-  },
-  tagUuid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Tag",
-    default: null
-  }
-},{
-  _id: false
-});
-
-const StoreDetails = new mongoose.Schema({
-  storeId: {
-    type: Number,
-    default: null
-  },
-  storeUuid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "_Store",
-    default: null
-  }
-},{
-  _id: false
-});
-
 const SupplierSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
+    },
+    address:{
+      type: String,
+      required: [true, "El campo 'address' es requerido"],
+    },
+    city: {
+      type: String,
+      required: [true, "El campo 'city' es requerido"],
+    },
+    state: {
+      type: String,
+      required: [true, "El campo 'state' es requerido"],
+    },
+    country: {
+      type: String,
+      required: [true, "El campo 'country' es requerido"],
+    },
+    lat:{
+      type: Number,
+      required: [true, "El campo 'lat' es requerido"],
+    },
+    lng:{
+      type: Number,
+      required: [true, "El campo 'lng' es requerido"],
+    },
+    zip: {
+      type: String,
     },
     name: {
       type: String,
       required: [true, "El campo 'name' es requerido"],
+    },
+    phone: {
+      type: String,
+    },
+    leadTime: {
+      type: Number,
+    },
+    email: {
+      type: String,
+    },
+    website: {
+      type: String,
     },
     logoUrl: {
       type: String,
@@ -107,31 +70,6 @@ const SupplierSchema = new mongoose.Schema(
       type: Number,
       required: [true, "El campo 'name' es requerido"],
     },
-    brands: [
-      {
-        type: BrandDetails
-      }
-    ],
-    categories: [
-      {
-        type: CategoryDetails
-      }
-    ],
-    subcategories: [
-      {
-        type: SubCategoryDetails
-      }
-    ],
-    tags: [
-      {
-        type: TagDetails
-      }
-    ],
-    affiliatedStores: [
-      {
-        type: StoreDetails
-      }
-    ],
     organization: {
       type: OrganizationDetails
     },

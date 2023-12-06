@@ -35,7 +35,6 @@ const UserSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     username: {
       type: String,
@@ -67,8 +66,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "store_supervisor", "client", "customer"],
     },
+    gender: {
+      type: String,
+      required: [true, "El campo 'gender' es requerido"],
+    },
     numDocument: {
       type: String,
+      unique: true,
       required: [true, 'El campo "numDocument" es requerido'],
     },
     name: {
@@ -77,11 +81,9 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      // required: [true, 'El campo "email" es requerido'],
     },
     telephoneNumber: {
       type: String,
-      // required: [true, 'El campo "telephoneNumber" es requerido'],
     },
     imageUrl: {
       type: String,

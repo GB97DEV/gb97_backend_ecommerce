@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
+import "./SubCategoryModel";
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -33,7 +34,6 @@ const TagSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     name: {
       type: String,

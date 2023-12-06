@@ -4,7 +4,6 @@ const OrganizationSchema = new mongoose.Schema(
   {
     Id: {
       type: Number,
-      unique: true,
     },
     organizationId: {
       type: String,
@@ -14,7 +13,6 @@ const OrganizationSchema = new mongoose.Schema(
     },
     organizationAlias: {
       type: String,
-      required: [true, "El campo 'organizationAlias' es requerido"],
     },
     organizationName: {
       type: String,
@@ -51,7 +49,7 @@ const OrganizationSchema = new mongoose.Schema(
       type: String,
     },
     organizationSocials: {
-      type: Object,
+      type: String,
     },
     organizationStatus: {
       type: Number,
