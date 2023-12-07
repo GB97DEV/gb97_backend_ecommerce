@@ -101,6 +101,15 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       required: [true, "El campo 'syncStatus' es requerido"]
     },
+    facebookLogin: {
+      type: String
+    },
+    googleLogin: {
+      type: String
+    },
+    appleLogin: {
+      type: String
+    },
     organization: {
       type: OrganizationDetails
     },
