@@ -31,7 +31,7 @@ export const main = async (event, context) => {
     await connectDatabase();
 
     const { username, password } = JSON.parse(event.body);
-    const userExist = await User.findOne({ username: username }).populate(["organization","store"]).lean();;
+    const userExist = await User.findOne({ username: username }).populate(["organization.organizationUuid","store.storeUuid"]).lean();;
     if (!userExist) {
       let messageError: string;
       if (acceptLanguage === "es") {

@@ -64,7 +64,7 @@ const UserSchema = new mongoose.Schema(
     },
     rol: {
       type: String,
-      enum: ["admin", "store_supervisor", "client", "customer"],
+      enum: ["admin", "store_supervisor", "seller", "customer"],
     },
     gender: {
       type: String,
@@ -102,13 +102,16 @@ const UserSchema = new mongoose.Schema(
       required: [true, "El campo 'syncStatus' es requerido"]
     },
     facebookLogin: {
-      type: String
+      type: Boolean,
+      required: [true, "El campo 'facebookLogin' es requerido"]
     },
     googleLogin: {
-      type: String
+      type: Boolean,
+      required: [true, "El campo 'googleLogin' es requerido"]
     },
     appleLogin: {
-      type: String
+      type: Boolean,
+      required: [true, "El campo 'appleLogin' es requerido"]
     },
     organization: {
       type: OrganizationDetails
