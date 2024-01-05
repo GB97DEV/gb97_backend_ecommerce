@@ -47,7 +47,10 @@ export const main = authMiddleware( async (event, context) => {
     });
 
     pipeline.push({
-      $unwind: `$${referenceKey}`,
+      $unwind: {
+        path: `$${referenceKey}`,
+        preserveNullAndEmptyArrays: true,  // Manejo de referencias nulas o vacías
+      },
     });
   }
 
@@ -81,7 +84,7 @@ export const main = authMiddleware( async (event, context) => {
         headers: responseHeaders,
         body: JSON.stringify({
           response: false,
-          message: "No existen registros.",
+          message: acceptLanguage === "es" ?"No existen registros." :"There are no records",
           data: null,
         }),
       };

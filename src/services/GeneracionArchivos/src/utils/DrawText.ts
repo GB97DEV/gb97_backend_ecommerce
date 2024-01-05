@@ -8,7 +8,7 @@ interface DrawTextOptions {
 
 export const DrawText = (page: PDFPage, font: PDFFont, text: string, size: number, x: number, y: number, options: DrawTextOptions = {}) => {
   const { color = rgb(0,0,0) } = options;
-  const content = ValidateNull(text); 
+  const content = ValidateNull(text);
   try{
     page.drawText(FormatDocument(content),{
       x,
@@ -19,6 +19,6 @@ export const DrawText = (page: PDFPage, font: PDFFont, text: string, size: numbe
     });
   } catch(err){
     console.log(err);
-    throw new Error(`Error en el texto: ${text}`);
+    throw new Error(`Error en el texto: ${content}`);
   }
 }

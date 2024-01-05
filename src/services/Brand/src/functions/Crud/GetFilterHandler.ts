@@ -69,7 +69,7 @@ export const main = authMiddleware( async (event, context) => {
         headers: responseHeaders,
         body: JSON.stringify({
           response: false,
-          message: "No existen registros.",
+          message: acceptLanguage === "es" ?"No existen registros." :"There are no records",
           data: null,
         }),
       };

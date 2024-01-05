@@ -33,7 +33,7 @@ const StoreDetails = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     username: {

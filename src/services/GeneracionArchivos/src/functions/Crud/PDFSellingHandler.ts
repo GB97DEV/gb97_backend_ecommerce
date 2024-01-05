@@ -1,25 +1,28 @@
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib';
+import { S3, config } from "aws-sdk";
 
 import Selling from "../../models/SellingModel";
 
-import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders.js";
+import connectDatabase from "../../../../../database/mongodb";
 
 import { authMiddleware } from "../../../../../middleware/authentication";
 
 import { CenterText } from "../../utils/CenterText";
-import { OrganizationInformation } from '../../utils/OrganizationInformation';
+import { StoreInformation } from '../../u../../utils/StoreInformation';
 import { ClientInformation } from '../../utils/ClientInformation';
 import { SellingNumber } from '../../utils/SellingNumber';
 import { SellingInformation } from '../../utils/SellingInformation';
+import { TotalInformation } from '../../utils/TotalInformation';
+import { FooterInformation } from '../../utils/FooterInformation';
 
 //Valores globales del
 const widthPage = 590;
 const heightPage = 850;
 const margin = 20;
 
-export const main = async (event, context) => {
+export const main = authMiddleware(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const { _id } = event.pathParameters;
   
@@ -27,12 +30,20 @@ export const main = async (event, context) => {
   let index = 0;
   let text = "";
 
-  let organizationAlias: string = '';
   let organizationId: string = '';
-  let organizationName: string = '';
-  let organizationAddress: string = '';
 
-  await connectDatabase();
+  let subTotal12: number = 0;
+  let totalIVA: number = 0;
+
+  try{
+    await connectDatabase();
+  } catch(err){
+    console.log(err);
+    return {
+      statusCode: err.statusCode || 500,
+      body: JSON.stringify({ error: err.message }),
+    };
+  }
 
   const sellingData: any = await Selling.findById(_id).populate([
     "organization.organizationUuid",
@@ -65,7 +76,8 @@ export const main = async (event, context) => {
   y -= margin;
   
   try {
-    [organizationAlias, organizationId, y ] = await OrganizationInformation(doc, page, helvetica, helveticaBold, sellingData.organization.organizationUuid, y, widthPage, margin);
+    [ y ] = await StoreInformation(doc, page, helvetica, helveticaBold, sellingData.store.storeUuid, y, widthPage, margin);
+    organizationId = sellingData.organization.organizationUuid.organizationId;
   } catch (err) {
     console.log(err);
     return {
@@ -90,8 +102,10 @@ export const main = async (event, context) => {
     };
   }
 
+  y -= margin;
+
   try{
-    [y, page, []] = await SellingInformation(doc, page, helvetica, helveticaBold, helveticaOblique, sellingData.items, widthPage, heightPage, margin, index, y);
+    [y, page, index, subTotal12, totalIVA ] = await SellingInformation(doc, page, helvetica, helveticaBold, helveticaOblique, sellingData.items, widthPage, heightPage, margin, index, y);
   } catch(err){
     console.log(err);
     return {
@@ -100,15 +114,87 @@ export const main = async (event, context) => {
     };
   }
 
-  // const filename = fileName(organizationAlias.replace(/ /g,"-"), orderData.code)
+  y -= 10;
+
+  try {
+    const observationData = {
+      charge: sellingData.charge,
+      payments: sellingData.payments,
+      numOfPayments: sellingData.numOfPayments,
+    };
+
+    const totalData = {
+      subTotal12,
+      totalIVA,
+    };
+
+    [y, page, index] = await TotalInformation(doc, page, helvetica, helveticaBold, helveticaOblique, observationData, totalData, widthPage, heightPage, margin, index, y);
+  } catch(err){
+    console.log(err);
+    return {
+      statusCode: err.statusCode || 500,
+      body: JSON.stringify({ error: err.message }),
+    };
+  }
+
+  do {
+    page = doc.getPage(index);
+    await FooterInformation(doc, page, helveticaOblique);
+    index--;
+  }while (index >= 0)
+  const filename = `ComprobanteVenta-${sellerNumber}`
   const pdfBytes = await doc.save();
   const buffer = Buffer.from(pdfBytes);
-   return {
-    statusCode: 200,
-    headers:{
-      "Content-Type": "application/pdf",
-    },
-    body: buffer.toString('base64'),
-    isBase64Encoded:true,
+  
+  // return {
+  //   statusCode: 200,
+  //   headers:{
+  //     "Content-Type": "application/pdf",
+  //   },
+  //   body: buffer.toString('base64'),
+  //   isBase64Encoded:true,
+  // }
+  
+  config.update({
+    accessKeyId: "AKIA5435MIR6HPQR7BQF",
+    secretAccessKey: "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",
+    region: "us-east-1"
+  });
+  const s3 = new S3();
+  
+  const key = `${organizationId}/selling/${filename}.pdf`;
+  const bucketName = "bucket-documents-pos";
+  // Subir el objeto al bucket
+  await s3.putObject({
+    Bucket: bucketName,
+    Key: key,
+    Body: buffer,
+    ContentType: "application/pdf",
+  }).promise();
+
+  const publicUrl = `https://${bucketName}.s3.amazonaws.com/${key}`;
+
+  try{
+    // await Quotation.findOneAndUpdate()
+
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify({
+        response: true,
+        message: `Se genero el comprobante: ${sellerNumber}`,
+        url: publicUrl,
+      }),
+    };
+    return response;
+  } catch (error) {
+    console.error('Error al guardar el Comprobante:', error);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        response: false,
+        message: `Error al guardar el Comprobante: ${error.message}`,
+      }),
+    };
   }
-};
+});

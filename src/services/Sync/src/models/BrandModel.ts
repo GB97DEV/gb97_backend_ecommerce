@@ -17,7 +17,7 @@ const OrganizationDetails = new mongoose.Schema({
 
 const BrandSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     name: {

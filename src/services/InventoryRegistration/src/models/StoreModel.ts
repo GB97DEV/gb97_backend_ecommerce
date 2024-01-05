@@ -33,7 +33,7 @@ const SupplierBranchDetails = new mongoose.Schema({
 
 const StoreSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     storeName: {

@@ -82,7 +82,7 @@ const SupplierBranchDetails = new mongoose.Schema({
 
 const InventorySchema = new mongoose.Schema(
   {
-    Id:{
+    id:{
       type: Number,
       unique: true,
     },

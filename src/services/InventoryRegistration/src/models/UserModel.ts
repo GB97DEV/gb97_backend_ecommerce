@@ -33,7 +33,7 @@ const StoreDetails = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     username: {
@@ -101,7 +101,7 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       required: [true, "El campo 'syncStatus' es requerido"]
     },
-        facebookLogin: {
+    facebookLogin: {
       type: Boolean,
       required: [true, "El campo 'facebookLogin' es requerido"]
     },

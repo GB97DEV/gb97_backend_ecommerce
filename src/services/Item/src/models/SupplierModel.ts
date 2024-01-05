@@ -17,7 +17,7 @@ const OrganizationDetails = new mongoose.Schema({
 
 const SupplierSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     address:{

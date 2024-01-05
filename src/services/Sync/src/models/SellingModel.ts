@@ -120,7 +120,7 @@ const OrganizationDetails = new mongoose.Schema({
 
 const SellingSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     code: {

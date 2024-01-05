@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const OrganizationSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     organizationId: {

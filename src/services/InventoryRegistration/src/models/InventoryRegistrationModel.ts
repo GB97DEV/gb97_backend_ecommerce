@@ -62,7 +62,7 @@ const OrganizationDetails = new mongoose.Schema({
 
 const InventoryRegistrationSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     registryType:{

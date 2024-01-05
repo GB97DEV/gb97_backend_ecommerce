@@ -32,6 +32,21 @@ const GetFilterSubCategory = {
   ],
 };
 
+const GetAllSubCat = {
+  handler: `${handlerPath(__dirname)}/Crud/GetAllSubHandler.main`,
+  events: [
+    {
+      http: {
+        cors: {
+          origins: ["*"],
+        },
+        method: "post",
+        path: `${base_path}/categories`,
+      },
+    },
+  ],
+};
+
 const CreateSubCategory = {
   handler: `${handlerPath(__dirname)}/Crud/CreateHandler.main`,
   events: [
@@ -95,6 +110,7 @@ const UpdateSubCategory = {
 export {
   GetAllSubCategory,
   GetFilterSubCategory,
+  GetAllSubCat,
   GetSubCategory,
   CreateSubCategory, 
   DeleteSubCategory,

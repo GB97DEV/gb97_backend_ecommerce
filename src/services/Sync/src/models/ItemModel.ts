@@ -108,7 +108,7 @@ const SupplierDetails = new mongoose.Schema({
 
 const ItemSchema = new mongoose.Schema(
   {
-    Id:{
+    id:{
       type: Number,
       unique: true,
     },
@@ -142,7 +142,7 @@ const ItemSchema = new mongoose.Schema(
       required: [true, "El campo 'price' es requerido"]
     },
     priceBy: {
-      type: Number,
+      type: String,
     },
     syncStatus:{
       type: Number,

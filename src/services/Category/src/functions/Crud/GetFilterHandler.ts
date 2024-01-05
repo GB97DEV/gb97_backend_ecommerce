@@ -1,10 +1,14 @@
 import Category from "../../models/CategoryModel";
+import Organization from "../../models/OrganizationModel";
+
 import connectDatabase from "../../../../../database/mongodb";
 import customMessage from "../../../../../helpers/customMessage";
 import responseHeaders from "../../../../../helpers/responseHeaders";
+
 import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
-import Organization from "../../models/OrganizationModel";
+import mongoose from "mongoose";
+
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -35,23 +39,39 @@ export const main = authMiddleware( async (event, context) => {
     });
 
     pipeline.push({
-      $unwind: `$${referenceKey}`,
+      $unwind: {
+        path: `$${referenceKey}`,
+        preserveNullAndEmptyArrays: true,  // Manejo de referencias nulas o vacías
+      },
     });
   }
 
   for (const [key, value] of filtrosValidos) {
     if (referenceKeys.includes(key.split(".")[0])) {
       const filterKey = `${key}`;
-      const regexFilter =
-        typeof value === "string"
-          ? { $regex: new RegExp(value.toLowerCase(), "i") }
-          : value;
-      pipeline.push({ $match: { [filterKey]: regexFilter } });
+      let filterValue;
+
+      if (typeof value === "string" && mongoose.Types.ObjectId.isValid(value)) {
+        filterValue = new mongoose.Types.ObjectId(value);
+      } else if (typeof value === "string") {
+        filterValue = { $regex: new RegExp(value.toLowerCase(), "i") };
+      } else {
+        filterValue = value;
+      }
+
+      pipeline.push({ $match: { [filterKey]: filterValue } });
     } else {
-      query[key] =
-        typeof value === "string"
-          ? { $regex: new RegExp(value.toLowerCase(), "i") }
-          : value;
+      let queryValue;
+
+      if (typeof value === "string" && mongoose.Types.ObjectId.isValid(value)) {
+        queryValue = new mongoose.Types.ObjectId(value);
+      } else if (typeof value === "string") {
+        queryValue = { $regex: new RegExp(value.toLowerCase(), "i") };
+      } else {
+        queryValue = value;
+      }
+
+      query[key] = queryValue;
     }
   }
 
@@ -69,7 +89,7 @@ export const main = authMiddleware( async (event, context) => {
         headers: responseHeaders,
         body: JSON.stringify({
           response: false,
-          message: "No existen registros.",
+          message: acceptLanguage === "es" ?"No existen registros." :"There are no records",
           data: null,
         }),
       };

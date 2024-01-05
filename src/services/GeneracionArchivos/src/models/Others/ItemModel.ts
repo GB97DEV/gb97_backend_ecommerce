@@ -141,7 +141,7 @@ const ItemSchema = new mongoose.Schema(
       required: [true, "El campo 'price' es requerido"]
     },
     priceBy: {
-      type: Number,
+      type: String,
     },
     syncStatus:{
       type: Number,

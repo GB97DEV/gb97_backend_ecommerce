@@ -7,7 +7,7 @@ import { ValidatePage } from "./ValidatePage";
 import { ValidateNull } from "./ValidateNull";
 import { DrawSplitText } from "./DrawSplitText";
 
-export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal: PDFFont, bold: PDFFont, oblique: PDFFont, items: any, widthPage: number, heightPage: number, margin: number, index: number, y: number): Promise<[number, PDFPage, any[]]> => {
+export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal: PDFFont, bold: PDFFont, oblique: PDFFont, items: any, widthPage: number, heightPage: number, margin: number, index: number, y: number): Promise<[number, PDFPage, number, number, number]> => {
   let x = margin;
   let textSize = 9;
   let widthText = 0;
@@ -19,6 +19,8 @@ export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal:
   let minY = y; //Variable para determinar cual es el valor minimo de y
   let totalHeight = 0;
   let spacing = 0;
+  let subTotal12 = 0;
+  let totalIVA = 0;
   try{
     //Se define las cabeceras de la table con su respectiva referencia
     const header = [
@@ -27,11 +29,11 @@ export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal:
       {width: 170, label: "Descripción", ref: "itemDescription"},
       {width: 60, label: "P. Unitario", ref: "itemBasePrice"},
       {width: 50, label: "Desc.", ref: "itemDiscount"},
-      {width: 50, label: "P. Total", ref: "itemTotal"},
+      {width: 50, label: "Sub Total", ref: "itemTotal"},
     ] //El total de la suma de los width debe ser igual al widthPage menos los margenes de izquierda y derecha
 
     //Separación de la parte superior.
-    y -= 30;
+    y -= 10;
     //Se recorre el array header
     for(const { width, label } of header){
       DrawRectangle(page, x, y, width, 20, {color: rgb(0,0.15,0.81), opacity: 0.8, borderWidth: 0}); //Se dibuja el rectangulo de cada campo del header
@@ -47,14 +49,28 @@ export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal:
     for(const item of items){
       initialY = y; //Posicion inicial del texto tomado para calcular el height de la fila
       for(const {width, ref} of header){
-        [page, y] = await ValidatePage(doc, page, widthPage, heightPage, margin, index, y); //Verifica que exista espacio antes de cada fila
+        [page, y, index] = await ValidatePage(doc, page, widthPage, heightPage, margin, index, y); //Verifica que exista espacio antes de cada fila
 
-        if(ref !== "itemDescription"){
+        if(ref !== "itemDescription" && ref !== "itemBasePrice" && ref !== "itemTotal" && ref !== "itemDiscount"){
           text = `${item[ref]}`; //Define el la variable text los textos de cada uno de los item en base a la ref definida en el header
         }
 
         if(ref === "itemDescription"){
-          text = `Descripcion: ${ValidateNull(item[ref])}\nComentarios: ${ValidateNull(item["itemComment"])}` //Establece un texto predefindo para el itemDescription segun lo que necesita el usuario
+          text = `Descripcion: ${ValidateNull(item[ref])}\nComentarios: ${ValidateNull(item["itemComment"])}`; //Establece un texto predefindo para el itemDescription segun lo que necesita el usuario
+        }
+
+        if(ref === "itemBasePrice" || ref === "itemDiscount"){
+          text = item[ref].toFixed(2); //Determina hasta 2 decimales
+        }
+
+
+        if(ref === "itemTotal"){
+          const subTotal = item["itemQuantity"] * (item["itemBasePrice"] - item["itemDiscount"]); //Calcula el subTotal del producto
+          subTotal12 += subTotal; //Suma todos los subTotal
+          if(item["itemIsVat"]){ //Si lleba iva
+            totalIVA += subTotal * 0.12; //Calcula el valor del iva y lo suma al totalIVA
+          }
+          text = subTotal.toFixed(2); //Determina 2 decimales para el subTotal
         }
 
         const textArray = await SplitInformation(text); //Divide el texto en una matriz segun \n para respetar los espacios puestos por el usuario
@@ -87,7 +103,7 @@ export const SellingInformation = async(doc: PDFDocument, page: PDFPage, normal:
       x = margin; //Reestablece el valor de x para posicionarlo en el margen
       DrawRectangle(page, x, y, widthPage - (margin * 2), totalHeight); //Dibuja el rectangulo de cada fila
     }
-    return [y, page, []] //Devuelve los valores necesitados
+    return [y, page, index, subTotal12, totalIVA] //Devuelve los valores necesitados es importante ver que se capturen correctamente los valores enviados
   }catch(err){
     throw new CustomError(err.message, 500); //Manda error
   }

@@ -32,7 +32,7 @@ const CategoryDetails = new mongoose.Schema({
 
 const SubCategorySchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     name: {

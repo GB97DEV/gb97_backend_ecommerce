@@ -21,7 +21,7 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
     },
     //tiempo de espera de respuesta, para desarrollo aumentarle a 60
-    timeout: 60,
+    timeout: 6,
     environment: {
       STAGE: "${opt:stage, 'dev'}",
       SERVICE: "${self:service}",

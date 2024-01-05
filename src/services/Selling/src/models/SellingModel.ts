@@ -120,7 +120,7 @@ const OrganizationDetails = new mongoose.Schema({
 
 const SellingSchema = new mongoose.Schema(
   {
-    Id: {
+    id: {
       type: Number,
     },
     code: {
@@ -164,6 +164,10 @@ const SellingSchema = new mongoose.Schema(
     clientAddress: {
       type: String,
       required: [true, "El campo 'clientAddress' es requerido"]
+    },
+    clientNumDocument: {
+      type: String,
+      required: [true, "El campo 'clientNumDocument' es requerido"]
     },
     sellerName: {
       type: String,

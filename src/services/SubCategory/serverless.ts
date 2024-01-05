@@ -7,6 +7,7 @@ import {
   CreateSubCategory,
   DeleteSubCategory,
   UpdateSubCategory,
+  GetAllSubCat,
 } from "./src/functions";
 
 const serverlessConfiguration: AWS = {
@@ -42,6 +43,7 @@ const serverlessConfiguration: AWS = {
     CreateSubCategory,
     DeleteSubCategory,
     UpdateSubCategory,
+    GetAllSubCat,
   },
   package: {
     individually: true,
