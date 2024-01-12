@@ -16,6 +16,8 @@ import { SellingNumber } from '../../utils/SellingNumber';
 import { SellingInformation } from '../../utils/SellingInformation';
 import { TotalInformation } from '../../utils/TotalInformation';
 import { FooterInformation } from '../../utils/FooterInformation';
+import { GenerateQRCode } from '../../utils/GenerateQRCode';
+import { DrawQRCode } from '../../utils/DrawQRCode';
 
 //Valores globales del
 const widthPage = 590;
@@ -137,12 +139,26 @@ export const main = authMiddleware(async (event, context) => {
     };
   }
 
+  const filename = `ComprobanteVenta-${sellerNumber}`
+
+  const key = `${organizationId}/selling/${filename}.pdf`;
+  const bucketName = "bucket-documents-pos";
+  const publicUrl = `https://${bucketName}.s3.amazonaws.com/${key}`;
+
+  const qrData = await GenerateQRCode(publicUrl);
+  
+  try {
+    await DrawQRCode(doc, page, qrData);
+  } catch (err) {
+    console.log(err);
+  }
+
   do {
     page = doc.getPage(index);
     await FooterInformation(doc, page, helveticaOblique);
     index--;
   }while (index >= 0)
-  const filename = `ComprobanteVenta-${sellerNumber}`
+
   const pdfBytes = await doc.save();
   const buffer = Buffer.from(pdfBytes);
   
@@ -162,8 +178,7 @@ export const main = authMiddleware(async (event, context) => {
   });
   const s3 = new S3();
   
-  const key = `${organizationId}/selling/${filename}.pdf`;
-  const bucketName = "bucket-documents-pos";
+  
   // Subir el objeto al bucket
   await s3.putObject({
     Bucket: bucketName,
@@ -171,8 +186,6 @@ export const main = authMiddleware(async (event, context) => {
     Body: buffer,
     ContentType: "application/pdf",
   }).promise();
-
-  const publicUrl = `https://${bucketName}.s3.amazonaws.com/${key}`;
 
   try{
     // await Quotation.findOneAndUpdate()
