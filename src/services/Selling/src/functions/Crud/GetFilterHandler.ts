@@ -13,6 +13,16 @@ import { applyPaginationEmb } from "../../../../../helpers/paginationEmb";
 import { authMiddleware } from "../../../../../middleware/authentication";
 import mongoose from "mongoose";
 
+function normalizeDate(dateString) {
+  const parts = dateString.split("T");
+  const dateParts = parts[0].split("-");
+
+  const year = dateParts[0];
+  const month = String(dateParts[1]).padStart(2, "0");
+  const day = String(dateParts[2]).padStart(2, "0");
+
+  return new Date(`${year}-${month}-${day}T${parts[1]}`);
+}
 
 export const main = authMiddleware( async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -26,13 +36,13 @@ export const main = authMiddleware( async (event, context) => {
   );
 
   let query = {};
+  const createdAtQuery: any = {};
   const pipeline: any[] = [];
 
   const referenceKeys = [
     "store.storeUuid",
-    "client.clientUuid", 
+    "client.clientUuid",
     "seller.sellerUuid",
-    "items.itemUuid",
     "organization.organizationUuid",
   ];
   const referenceMaps = {
@@ -44,9 +54,6 @@ export const main = authMiddleware( async (event, context) => {
     },
     "seller.sellerUuid":{
       model: User
-    },
-    "items.itemUuid": {
-      model: Item
     },
     "organization.organizationUuid": {
       model: Organization,
@@ -74,11 +81,43 @@ export const main = authMiddleware( async (event, context) => {
     });
   }
 
+  const { startDate, endDate } = filtros;
+  if (startDate && endDate) {
+    const start = normalizeDate(startDate);
+    const end = normalizeDate(endDate);
+
+    // const start = new Date(startDate);
+    // const end = new Date(endDate);
+    // Comprueba que las fechas son válidas
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      throw new Error("Las fechas proporcionadas no son válidas.");
+    }
+
+    // Asegúrate de que start es anterior a end
+    if (start > end) {
+      throw new Error(
+        "La fecha de inicio debe ser anterior a la fecha de fin."
+      );
+    }
+
+    createdAtQuery.createdAt = {
+      $gte: start,
+      $lte: end,
+    };
+  }
+
+  // Si `createdAtQuery` no está vacío, agrégalo al pipeline como una etapa `$match`
+  if (Object.keys(createdAtQuery).length > 0) {
+    pipeline.push({ $match: createdAtQuery });
+  }
+
   for (const [key, value] of filtrosValidos) {
+    if(key === "startDate" || key === "endDate"){
+      continue;
+    }
     if (referenceKeys.includes(key.split(".")[0])) {
       const filterKey = `${key}`;
       let filterValue;
-
       if (typeof value === "string" && mongoose.Types.ObjectId.isValid(value)) {
         filterValue = new mongoose.Types.ObjectId(value);
       } else if (typeof value === "string") {
@@ -122,7 +161,6 @@ export const main = authMiddleware( async (event, context) => {
         }),
       };
     }
-
     //Defino los atirbutos que necesito
     const modifiedData = data.map(item => ({
       ...item,

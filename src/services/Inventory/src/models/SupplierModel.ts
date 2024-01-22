@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import "./OrganizationModel";
+import "./BrandModel";
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -14,6 +15,20 @@ const OrganizationDetails = new mongoose.Schema({
 }, {
   _id: false // Configura _id como false para el esquema OrganizationDetails
 });
+
+const BrandDetails = new mongoose.Schema({
+  brandId: {
+    type: Number,
+    default: null
+  },
+  brandUuid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Brand",
+    default: null,
+  }
+},{
+  _id: false
+})
 
 const SupplierSchema = new mongoose.Schema(
   {
@@ -66,6 +81,11 @@ const SupplierSchema = new mongoose.Schema(
     logoUrl: {
       type: String,
     },
+    brands: [
+      {
+        type: BrandDetails
+      }
+    ],
     syncStatus: {
       type: Number,
       required: [true, "El campo 'name' es requerido"],
