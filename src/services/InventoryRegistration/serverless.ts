@@ -25,6 +25,7 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
+    timeout: 6,
     environment: {
       STAGE: "${opt:stage, 'dev'}",
       SERVICE: "${self:service}",

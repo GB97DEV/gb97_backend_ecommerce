@@ -66,7 +66,7 @@ const InventoryRegistrationSchema = new mongoose.Schema(
       type: Number,
     },
     registryType:{
-      type: Number,
+      type: Number, //1 Add, 2 Restar
       required: [true, "El campo 'registryType' es requerido"]
     },
     date: {
