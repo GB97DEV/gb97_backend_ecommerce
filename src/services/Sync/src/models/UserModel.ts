@@ -113,9 +113,9 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       required: [true, "El campo 'appleLogin' es requerido"]
     },
-    organization: {
+    organization: [{
       type: OrganizationDetails
-    },
+    }],
     store: {
       type: StoreDetails,
     }

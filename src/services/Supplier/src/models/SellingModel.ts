@@ -3,7 +3,7 @@ import counterModel from "../../../../helpers/counterModel.js"
 import "./ClientModel";
 import "./StoreModel";
 import "./OrganizationModel";
-import "./UserModel";
+import "./UserModel.js";
 import "./InventoryModel"
 
 const SellingItem = new mongoose.Schema({
