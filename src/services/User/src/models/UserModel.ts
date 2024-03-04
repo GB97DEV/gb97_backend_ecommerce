@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import * as bcrypt from "bcryptjs";
 import "./StoreModel";
 import "./OrganizationModel";
+import "./RolModel"
 
 const OrganizationDetails = new mongoose.Schema({
   organizationId: {
@@ -63,8 +64,9 @@ const UserSchema = new mongoose.Schema(
       enum: ["activo", "inactivo"],
     },
     rol: {
-      type: String,
-      enum: ["admin", "store_supervisor", "seller", "customer"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Rol",
+      default: null
     },
     gender: {
       type: String,
@@ -78,6 +80,10 @@ const UserSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'El campo "name" es requerido'],
+    },
+    lastname: {
+      type: String,
+      required: [true, 'El campo "lastname" es requerido'],
     },
     email: {
       type: String,

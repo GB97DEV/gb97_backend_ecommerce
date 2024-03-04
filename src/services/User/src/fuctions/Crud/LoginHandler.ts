@@ -31,7 +31,16 @@ export const main = async (event, context) => {
     await connectDatabase();
 
     const { username, password } = JSON.parse(event.body);
-    const userExist = await User.findOne({ username: username }).populate(["organization.organizationUuid","store.storeUuid"]).lean();;
+    const userExist = await User.findOne({ username: username }).populate([
+      {
+        path: "organization.organizationUuid"
+      },
+      {
+        path: "store.storeUuid"
+      },{
+        path: "rol",
+        select: "name imageUrl module"
+      }]).lean();
     if (!userExist) {
       let messageError: string;
       if (acceptLanguage === "es") {
@@ -98,8 +107,6 @@ export const main = async (event, context) => {
         message: loginMessage,
         serverMessage: null,
         data: {
-          userId: userExist._id,
-          userName: userExist.username,
           token: token,
           userExist
         },
