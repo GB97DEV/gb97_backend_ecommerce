@@ -151,6 +151,9 @@ const ItemSchema = new mongoose.Schema(
       type: Object,
       required: [true, "El campo 'features' es requerido"]
     },
+    image: [{
+      type: String
+    }],
     itemCategory: {
       type: CategoryDetails
     },
