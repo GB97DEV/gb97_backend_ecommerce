@@ -39,7 +39,8 @@ export const main = async (event, context) => {
         path: "store.storeUuid"
       },{
         path: "rol",
-        select: "name imageUrl module"
+        select: "name imageUrl module",
+        options: { preserveNullAndEmptyArrays: true }
       }]).lean();
     if (!userExist) {
       let messageError: string;
